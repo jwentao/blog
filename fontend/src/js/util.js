@@ -1,0 +1,1 @@
+export let $ = el => document.querySelectorAll(el)
