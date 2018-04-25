@@ -1,6 +1,7 @@
 const express = require('express')
 const webpack = require('webpack')
 const opn = require('opn')
+const path = require('path')
 
 const app = express()
 const port = 3000
@@ -22,7 +23,11 @@ for (let context in proxyTable) {
 app.use(historyApiFallback(require('./historyfallback')))
 
 app.use(webpackDevMiddleware(compiler, {
-    publicPath: config.output.publicPath
+    publicPath: config.output.publicPath,
+		stats: {
+			colors: true,
+			chunks: false
+		}
 }))
 
 // 路由
