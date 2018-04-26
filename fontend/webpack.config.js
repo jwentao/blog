@@ -14,7 +14,8 @@ var extractLess = new ExtractTextWebpackPlugin({
 module.exports = {
 	entry: {
 		app: './src/app.js',
-		detail: './src/detail.js'
+		detail: './src/detail.js',
+		edit: './src/edit.js'
 	},
 
 	output: {
@@ -189,6 +190,14 @@ module.exports = {
 				collapseWhitespace: true
 			},
 			chunks: ['detail']
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'edit.html',
+			template: './edit.html',
+			minify: {
+				collapseWhitespace: true
+			},
+			chunks: ['edit']
 		}),
 		new webpack.optimize.UglifyJsPlugin(),
 		new CleanWebpackPlugin(path.resolve(__dirname, './dist'))
