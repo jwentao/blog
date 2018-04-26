@@ -86,7 +86,8 @@ const generateConfig = env => {
 	return {
 		entry: {
 			app: './src/app.js',
-			detail: './src/detail.js'
+			detail: './src/detail.js',
+			edit: './src/edit.js'
 		},
 
 		output: {
@@ -168,6 +169,14 @@ const generateConfig = env => {
 					collapseWhitespace: true
 				},
 				chunks: ['detail']
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'edit.html',
+				template: './edit.html',
+				minify: {
+					collapseWhitespace: true
+				},
+				chunks: ['edit']
 			})
 		]
 	}
