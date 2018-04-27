@@ -1,0 +1,8 @@
+@import './common/base.scss';
+@import './common/layout.scss';
+@import 'markdown.css';
+.content {
+  .article-box {
+    padding: 1.5rem;
+  }
+}

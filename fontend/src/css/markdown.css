@@ -622,6 +622,7 @@
     white-space: pre;
     background: transparent;
     border: 0;
+    color: #333;
 }
 
 .markdown-body .highlight {

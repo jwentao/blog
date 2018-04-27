@@ -1,4 +1,4 @@
-@import './base.scss';
+@import 'common/base';
 @import './markdown.css';
 .main {
   display: flex;
@@ -23,13 +23,16 @@
       }
     }
     border-right: 1px #333 solid;
+    @media (max-width: 400px) {
+      border: none;
+    }
   }
   .preview-box {
     flex: 1;
     box-sizing: border-box;
     padding: 30px;
     height: 100%;
-    overflow: hidden;
+    overflow: scroll;
     background-color: white;
     @media (max-width: 400px) {
       display: none;

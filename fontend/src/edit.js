@@ -8,11 +8,17 @@ let converter = new showdown.Converter({
 	extensions: [showdownhighlight]
 });
 
-let inputText = $('#text-input')[0]
-let contentText = $('#content')[0]
+let inputText = $('#text-input')
+let contentText = $('#content')
 inputText.addEventListener('keyup', e => {
-	contentText.innerHTML = converter.makeHtml(inputText.value)
-	console.log( converter.makeHtml(inputText.value))
+	let text = converter.makeHtml(inputText.value)
+	// showdown解析四个空格开头的代码块，会出现hljs字符，这里先暴力替换掉
+	text = text.replace(/>hljs/g, '>')
+	// 序列化h1的id
+	let idx = 0
+	text = text.replace(/(<h1[\S|\s]+?id=["|'])(\w+)/g, function(a,b,c,d){; return b +'heading-' + idx++})
+	contentText.innerHTML = text
+	console.log( text)
 }, false)
 
 HTMLTextAreaElement.prototype.getCaretPosition = function () {
@@ -43,9 +49,7 @@ HTMLTextAreaElement.prototype.setSelection = function (start, end) {
     this.selectionEnd = end;
     this.focus();
 };
-let textarea = inputText
 inputText.addEventListener('keydown', e => {
-
 	if (event.key !== 'Tab') return
 	// if (event && event.preventDefault) {
 	// 	console.log('a')
@@ -53,11 +57,14 @@ inputText.addEventListener('keydown', e => {
 	// } else {
 	// 	window.event.returnValue = false
 	// }
-    var newCaretPosition;
-    newCaretPosition = textarea.getCaretPosition() + "  ".length;
+	// tab占两个空格
+	let tab = '  '
+    let newCaretPosition;
+		console.log(inputText.getCaretPosition())
+    newCaretPosition = inputText.getCaretPosition() +tab.length;
     console.log(newCaretPosition)
-    textarea.value = textarea.value.substring(0, textarea.getCaretPosition()) + " " + textarea.value.substring(textarea.getCaretPosition(), textarea.value.length);
-    textarea.setCaretPosition(newCaretPosition);
+	inputText.value = inputText.value.substring(0, inputText.getCaretPosition()) + tab + inputText.value.substring(inputText.getCaretPosition(), inputText.value.length);
+	inputText.setCaretPosition(newCaretPosition);
     e.preventDefault()
     return false;
 }, false)

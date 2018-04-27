@@ -15,7 +15,8 @@ module.exports = {
 	entry: {
 		app: './src/app.js',
 		detail: './src/detail.js',
-		edit: './src/edit.js'
+		edit: './src/edit.js',
+		'vendor': './src/js/util.js'
 	},
 
 	output: {
@@ -167,9 +168,15 @@ module.exports = {
 				'./src/*.js'
 			])
 		}),
-		// new webpack.optimize.CommonsChunkPlugin({
-		//     name: 'manifest'
-		// }),
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'manifest',
+			children: true, // 需要查找children的共同子依赖
+			minChunks: 2
+		}),
+		new webpack.optimize.CommonsChunkPlugin({
+			names: [ 'vendor'], // 使用names效果等同于下面分开写的写法
+			minChunks: 2
+		}),
 		//
 		// new HtmlInlinkChunkPlugin({
 		//     inlineChunks: ['manifest']
@@ -189,7 +196,7 @@ module.exports = {
 			minify: {
 				collapseWhitespace: true
 			},
-			chunks: ['detail']
+			chunks: ['detail', 'vendor']
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'edit.html',
