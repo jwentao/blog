@@ -1,6 +1,7 @@
 // 模拟数据用
 
-export let gitPaper = `<h1 id="idx-0">1. git简介</h1>
+export let gitPaper = `
+<h1 id="idx-0">1. git简介</h1>
 <p>在实际开发中，会使用git作为版本控制工具来完成团队协作。因此，对基本的git操作指令进行总结是十分有必要的，本文对一些术语或者理论基础，不重新码字，可以<a href="https://link.juejin.im?target=https%3A%2F%2Fwww.liaoxuefeng.com%2Fwiki%2F0013739516305929606dd18361248578c67b8067c8c017b000">参考廖雪峰老师的博文</a>，本文只对命令做归纳总结。</p>
 <p>git的通用操作流程如下图（来源于网络）</p>
 <p><img src="https://user-gold-cdn.xitu.io/2018/4/25/162fcc0987bf1c0a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="git操作通用流程" /></p>
@@ -175,4 +176,14 @@ doc/**<span class="hljs-regexp">/*.txt
 <p><a href="https://link.juejin.im?target=http%3A%2F%2Fwww.ruanyifeng.com%2Fblog%2F2015%2F12%2Fgit-cheat-sheet.html">常用命令很全</a></p>
 <blockquote>
   <p><a href="https://juejin.im/post/5ae072906fb9a07a9e4ce596#heading-4">原文链接https://juejin.im/post/5ae072906fb9a07a9e4ce596#heading-4</a></p>
-</blockquote>`
+</blockquote>
+<h1 id="test1">测试目录1J</h1>
+<h2 id="test2">测试目录2j</h2>
+<h3 id="test3">测试目录3j</h3>
+<h2 id="test4">测试目录2j</h2>
+<h3 id="test5">测试目录3j</h3>
+<h4 id="test6">测试目录4j</h4>
+<h4 id="test7">测试目录4j</h4>
+<h3 id="test8">测试目录3j</h3>
+<h2 id="test9">测试目录2j</h2>
+`

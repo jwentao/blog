@@ -6,3 +6,53 @@
     padding: 1.5rem;
   }
 }
+.aside {
+  .article-catalog {
+    .catalog-title {
+      font-size: 1.167rem;
+      color: #000;
+    }
+    .catalog-body {
+      margin: 6px 0;
+      overflow: hidden;
+      .catalog-list {
+        .sub-list {
+        }
+        .item {
+          font-size: 1.167rem;
+          a {
+            color: #000;
+            position: relative;
+            display: block;
+            text-overflow: ellipsis;
+            padding: 4px 0 4px 12px;
+          }
+          a:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            margin-top: -2px;
+            width: 4px;
+            height: 4px;
+            background-color: currentColor;
+            border-radius: 50%;
+          }
+        }
+        .d1 {
+          font-weight: 600;
+        }
+        .d2 {
+          a {
+            margin-left: 36px;
+          }
+        }
+        .d3 {
+          a {
+            margin-left: 51px;
+          }
+        }
+      }
+    }
+  }
+}
