@@ -73,9 +73,14 @@ let catalog = `<div class="catalog-box">
 								</nav>
 							</div>`
 $('#aside').insertAdjacentHTML('beforeEnd', catalog)
-
-$('#catalog-body').addEventListener('click', e => {
+let catalogBody = $('#catalog-body')
+catalogBody.addEventListener('click', e => {
 	e.preventDefault()
-	console.log(e.target.attributes)
-	window.scrollBy(0, 60)
+	console.log(e.target.href)
+	let id = e.target.href.split('#')[1]
+	let activeLi = catalogBody.querySelector('.active')
+	if (activeLi) activeLi.classList.remove('active')
+	e.target.classList.add('active')
+	$('#' + id).scrollIntoView()
+	window.scrollBy(0, -60)
 }, false)

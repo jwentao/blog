@@ -38,6 +38,9 @@
             background-color: currentColor;
             border-radius: 50%;
           }
+          .active {
+            color: $themeColor;
+          }
         }
         .d1 {
           font-weight: 600;
