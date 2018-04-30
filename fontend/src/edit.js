@@ -16,7 +16,7 @@ inputText.addEventListener('keyup', e => {
 	text = text.replace(/>hljs/g, '>')
 	// 序列化h1的id
 	let idx = 0
-	text = text.replace(/(<h1[\S|\s]+?id=["|'])(\w+)/g, function(a,b,c,d){; return b +'heading-' + idx++})
+	text = text.replace(/(<h[1-6][\S|\s]+?id=["|'])(\w+)/g, function(a,b,c,d){; return b +'heading-' + idx++})
 	contentText.innerHTML = text
 	console.log( text)
 }, false)
