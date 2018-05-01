@@ -58,7 +58,7 @@ function generateListHtml(headerArr, d) {
 	if (!headerArr) return ''
 	let temp = `<ul class="${d === 1 ? 'catalog-list' : 'sub-list'}">`
 	for (let i in headerArr) {
-		temp += `<li class="item ${'d' + d}"><a href="#${headerArr[i].headId}">${headerArr[i].headTitle}</a></li>`
+		temp += `<li class="item ${'d' + d}"><a data-target="${headerArr[i].headId}">${headerArr[i].headTitle}</a></li>`
 		temp += generateListHtml(headerArr[i].children, d + 1)
 	}
 	temp += '</ul>'
@@ -76,11 +76,28 @@ $('#aside').insertAdjacentHTML('beforeEnd', catalog)
 let catalogBody = $('#catalog-body')
 catalogBody.addEventListener('click', e => {
 	e.preventDefault()
-	console.log(e.target.href)
-	let id = e.target.href.split('#')[1]
+	let id = e.target.dataset.target
 	let activeLi = catalogBody.querySelector('.active')
 	if (activeLi) activeLi.classList.remove('active')
 	e.target.classList.add('active')
 	$('#' + id).scrollIntoView()
 	window.scrollBy(0, -60)
 }, false)
+
+let io = new IntersectionObserver(e => {
+	console.log(e)
+	e = e[0]
+	if (e.isIntersecting) {
+		console.log('intersecting')
+        let activeLi = catalogBody.querySelector('.active')
+		console.log(activeLi)
+        if (activeLi) activeLi.classList.remove('active')
+		console.log(document.querySelector('a[data-target=' + e.target.id + ']'))
+        document.querySelector('a[data-target=' + e.target.id + ']').classList.add('active')
+	}
+})
+
+headerList.forEach(item => {
+	console.log(item)
+	io.observe(item)
+})
