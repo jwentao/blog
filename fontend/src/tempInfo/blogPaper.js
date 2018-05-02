@@ -38,7 +38,7 @@ export let blogPaper = `<p>此教程会教你从0到1搭建一个完整的博客
 <p>在editor中编辑代码，左边是编辑区，右边是视觉效果。编辑好后导出json文件。关于文档的编写这里不展开讲解，可以参考这篇文章<a href="https://link.juejin.im?target=https%3A%2F%2Fzhuanlan.zhihu.com%2Fp%2F21353795">传送门</a>，文章写得很详细。</p>
 <p>3、部署接口文档：</p>
 <p>在项目根目录下新建swagger文件夹，将下载的swagger-ui文件中dist目录下的所有文件复制到public文件夹下。将2步骤导出的json文件也放入swagger文件夹下。修改swagger下index.html文件中 url = "http://petstore.swagger.io/v2/swagger.json"，将其改为swagger.json。在index.js中加上静态模块：</p>
-<pre><code> app.use(&lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-string"</span>&gt;<span class="hljs-string">'/swagger'</span>&lt;/span&gt;, express.<span class="hljs-keyword">static</span>(&lt;span <span class="hljs-keyword">class</span>=<span class="hljs-string">"hljs-string"</span>&gt;<span class="hljs-string">'./swagger'</span>&lt;/span&gt;));
+<pre><code> app.<span class="hljs-keyword">use</span>(<span class="hljs-string">'/swagger'</span>, express.<span class="hljs-keyword">static</span>(<span class="hljs-string">'./swagger'</span>));
 </code></pre>
 <p>用node启动index.js，如果端口号为3000，在浏览器中打开 http://localhost:3000/swagger即可查看接口文档。</p>
 <p><strong>接口文档连接服务器，实时获取接口数据：</strong></p>
