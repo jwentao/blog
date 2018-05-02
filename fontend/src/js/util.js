@@ -1,13 +1,11 @@
 let nav = ['首页', '分页1', '分页2', '分页3']
 export let generateMainHtml = options => {
-	console.log('do')
 	let liList = ''
 	for (let [index, item] of nav.entries()) {
 		liList += '<li class="nav-item"><a href="" '
 		liList += options.activeIdx === index ? 'class="active"' : ''
 		liList += `>${item}</a></li>`
 	}
-	console.log(liList, 'flag')
 	let head = `<header class="header">
         <div class="container">
             <a href="/" class="iconfont icon-blogger"></a>
