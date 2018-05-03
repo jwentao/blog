@@ -1,24 +1,21 @@
 import './css/detail.scss'
-import {gitPaper} from './tempInfo/gitPaper'
+import {blogPaper} from './tempInfo/blogPaper'
 import {$, generateMainHtml} from './js/util'
 
 $('body')[0].innerHTML = generateMainHtml({activeIdx: -1})
 
 
 // 从本地拿模拟的数据出来
-let title = 'git基本操作，一篇文章就够了'
+let title = '从0到1搭建和部署个人博客'
 $('#content').innerHTML = `<div class="article-box"><h1 class="article-title">${title}</h1>
-													 <div id="article-body" class="markdown-body">${gitPaper}</div></div>`
+													 <div id="article-body" class="markdown-body">${blogPaper}</div></div>`
 let h1List = Array.from($('#article-body').querySelectorAll('h1'))
 let liHtml = ''
 for (let i in h1List) {
 	liHtml += `<li class="item"><a href="#${h1List[i].id}">${h1List[i].innerText}</a></li>`
 }
 //
-
-let testList = Array.from($('#article-body').querySelectorAll('h1, h2, h3, h4, h5, h6'))
-
-let headerList = Array.from($('#article-body').querySelectorAll("h1,h2,h3"));
+let headerList = Array.from($('#article-body').querySelectorAll("h1,h2,h3,h4,h5,h6"));
 
 function tree(headerList, e){
 	// 第一次传入时没有e参数，以header数组第一个元素高一级的header为基础，如h1-》h0， h2-》h1
@@ -83,21 +80,29 @@ catalogBody.addEventListener('click', e => {
 	$('#' + id).scrollIntoView()
 	window.scrollBy(0, -60)
 }, false)
-
+// 监听导航
 let io = new IntersectionObserver(e => {
 	console.log(e)
 	e = e[0]
+	console.log(e.target.id, e.intersectionRect.top, e.boundingClientRect)
 	if (e.isIntersecting) {
-		console.log('intersecting')
+				console.log(e.target.id, e.intersectionRect.top)
         let activeLi = catalogBody.querySelector('.active')
-		console.log(activeLi)
         if (activeLi) activeLi.classList.remove('active')
-		console.log(document.querySelector('a[data-target=' + e.target.id + ']'))
         document.querySelector('a[data-target=' + e.target.id + ']').classList.add('active')
 	}
 })
 
 headerList.forEach(item => {
-	console.log(item)
 	io.observe(item)
 })
+
+let asideIo = new IntersectionObserver(e => {
+	console.log('------', e)
+	if (e[0].isIntersecting) {
+		$('.article-catalog')[0].classList.remove('static')
+	} else {
+		$('.article-catalog')[0].classList.add('static')
+	}
+}, [1])
+asideIo.observe($('.banner')[0])

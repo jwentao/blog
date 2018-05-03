@@ -7,8 +7,13 @@
   }
 }
 .aside {
-  position: fixed!important;
-  top: 0;
+  .banner {
+  }
+  .static {
+    position: fixed;
+    top: 6rem;
+    transition: .3s;
+  }
   .article-catalog {
     .catalog-title {
       font-size: 1.167rem;
