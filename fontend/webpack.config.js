@@ -188,7 +188,7 @@ module.exports = {
 			minify: {
 				collapseWhitespace: true
 			},
-			chunks: ['app']
+			chunks: ['app', 'vendor']
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'detail.html',
