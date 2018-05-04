@@ -1,4 +1,10 @@
 let nav = ['首页', '分页1', '分页2', '分页3']
+/*
+	生成html的躯干
+	options包含
+ * @key  {[number]} activeIdx [对应nav数组的idx，将数组的这个元素设置为active]
+ * 待扩展
+ */
 export let generateMainHtml = options => {
 	let liList = ''
 	for (let [index, item] of nav.entries()) {
@@ -39,7 +45,7 @@ export let generateMainHtml = options => {
                 <div class="personal-info">
                     <div class="card-bar">
                         <div class="img-bar">
-                            <img src="/blog/fontend/src/img/j.png" alt="">
+                            <img src="http://47.106.128.227/static/img/j.png" alt="">
                         </div>
                         <div class="text-bar">
                             <p class="name">jwentao</p>
@@ -61,7 +67,10 @@ export let generateMainHtml = options => {
     </div>`
 	return head + main
 }
-
+/*
+	css选择器
+	除#id外，其余都返回数组
+ */
 export let $ = el => {
 	if (/^#/.test(el)) return document.querySelector(el)
 	return document.querySelectorAll(el)
