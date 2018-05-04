@@ -21,7 +21,7 @@ module.exports = {
 
 	output: {
 		path: path.resolve(__dirname, 'dist'),
-		filename: '[name]-bundle-[hash:5].js'
+		filename: 'js/[name]-bundle-[hash:5].js'
 	},
 
 	// resolve: {
@@ -204,7 +204,7 @@ module.exports = {
 			minify: {
 				collapseWhitespace: true
 			},
-			chunks: ['edit']
+			chunks: ['edit', 'vendor']
 		}),
 		new webpack.optimize.UglifyJsPlugin(),
 		new CleanWebpackPlugin(path.resolve(__dirname, './dist'))

@@ -1,6 +1,6 @@
-@import './common/base.scss';
-@import './common/layout.scss';
-@import 'markdown.css';
+@import './common/base';
+@import './common/layout';
+@import './common/markdown';
 .content {
   .article-box {
     padding: 1.5rem;
