@@ -6,6 +6,7 @@ var HtmlInlinkChunkPlugin = require('html-webpack-inline-chunk-plugin')
 var CleanWebpackPlugin = require('clean-webpack-plugin')
 var path = require('path')
 var glob = require('glob-all')
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 var extractLess = new ExtractTextWebpackPlugin({
 	filename: 'css/[name]-bundle-[hash:5].css',
@@ -18,7 +19,6 @@ module.exports = {
 		edit: './src/edit.js',
 		'vendor': './src/js/util.js'
 	},
-
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'js/[name]-bundle-[hash:5].js'
@@ -168,6 +168,13 @@ module.exports = {
 		// 		'./src/*.js'
 		// 	])
 		// }),
+		// copy static
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, 'static'),
+                to: path.resolve(__dirname, 'dist/static')
+            }
+        ]),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'manifest',
 			children: true, // 需要查找children的共同子依赖
