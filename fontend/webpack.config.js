@@ -162,12 +162,12 @@ module.exports = {
 
 	plugins: [
 		extractLess,
-		new PurifyWebpack({
-			paths: glob.sync([
-				'./*.html',
-				'./src/*.js'
-			])
-		}),
+		// new PurifyWebpack({
+		// 	paths: glob.sync([
+		// 		'./*.html',
+		// 		'./src/*.js'
+		// 	])
+		// }),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'manifest',
 			children: true, // 需要查找children的共同子依赖
