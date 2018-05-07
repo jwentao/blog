@@ -7,14 +7,28 @@ const path = require('path')
 const rfs = require('rotating-file-stream')
 const http = require('http')
 const app = express()
-const articleRouter = require('./routes/article');
+const articleRouter = require('./routes/article')
 
 /* 日志 */
 const logDirectory = path.join(__dirname, 'log')
 // ensure log directory exists
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+function pad(num) {
+	return (num > 9 ? "" : "0") + num;
+}
+function generator(time, index) {
+	if(! time)
+		return "file.log";
+
+	let month  = time.getFullYear() + "" + pad(time.getMonth() + 1)
+	let day    = pad(time.getDate())
+	let hour   = pad(time.getHours())
+	let minute = pad(time.getMinutes())
+
+	return month + "/" + month + day  + "-file.log"
+}
 // create a rotating write stream
-let accessLogStream = rfs('access.log', {
+let accessLogStream = rfs(generator(new Date()), {
 	interval: '1d', // rotate daily
 	path: logDirectory
 })
@@ -62,4 +76,4 @@ app.use(function(err, req, res, next) {
 	// res.render('error');
 });
 
-http.createServer(app).listen(3001)
+http.createServer(app).listen(80)
