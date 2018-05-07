@@ -1,18 +1,18 @@
-const express = require('express')
+const express = require('express');
 // morgan 日志中间件
-const morgan = require("morgan")
-const fs = require('fs')
-const path = require('path')
+const morgan = require("morgan");
+const fs = require('fs');
+const path = require('path');
 // 日志文件自动转换
-const rfs = require('rotating-file-stream')
-const http = require('http')
-const app = express()
-const articleRouter = require('./routes/article')
+const rfs = require('rotating-file-stream');
+const http = require('http');
+const app = express();
+const articleRouter = require('./routes/article');
 
 /* 日志 */
-const logDirectory = path.join(__dirname, 'log')
+const logDirectory = path.join(__dirname, 'log');
 // ensure log directory exists
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory)
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 function pad(num) {
 	return (num > 9 ? "" : "0") + num;
 }
@@ -20,7 +20,7 @@ function generator(time, index) {
 	if(! time)
 		return "file.log";
 
-	let month  = time.getFullYear() + "" + pad(time.getMonth() + 1)
+	let month  = time.getFullYear() + "" + pad(time.getMonth() + 1);
 	let day    = pad(time.getDate())
 	let hour   = pad(time.getHours())
 	let minute = pad(time.getMinutes())
@@ -33,8 +33,18 @@ let accessLogStream = rfs(generator(new Date()), {
 	path: logDirectory
 })
 // setup the logger
-app.use(morgan('combined', {stream: accessLogStream}))
+app.use(morgan('combined', {stream: accessLogStream}));
 
+
+//设置跨域访问
+app.all('*', function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+	res.header("X-Powered-By",' 3.2.1')
+	res.header("Content-Type", "application/json;charset=utf-8");
+	next();
+});
 /* 静态文件处理 */
 // 所有的请求通过这个中间件，如果没有文件被找到的话会继续前进
 let publicPath = path.resolve(__dirname, "../fontend/dist");
@@ -48,7 +58,7 @@ app.set('view engine', 'jade');
 app.get('/test/:who', function(request, response) {
 	response.end("Hello, " + request.params.who + ".");
 });
-app.use('/article', articleRouter)
+app.use('/article', articleRouter);
 
 
 // 前面都不匹配，则路由错误。返回 404 页面
@@ -63,7 +73,7 @@ app.use(function(req, res, next) {
 });
 // error handler
 app.use(function(err, req, res, next) {
-	console.log('------------------')
+	console.log('------------------');
 	// set locals, only providing error in development
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
