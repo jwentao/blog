@@ -12,6 +12,38 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false })
 router.get('/', function(req, res, next) {
 	res.end("Hello");
 });
+router.get('/get_article_list', (request, response, next) => {
+	console.log(request.query)
+	// 分页数据，默认每页10个，从0开始
+	let num = parseInt(request.query.num) ? parseInt(request.query.num) : 10;
+	let idx = parseInt(request.query.idx) ? parseInt(request.query.idx) * num : 0;
+	let conditions = {};
+	// 返回除开原文和转换后文章的所有字段
+	let fields = {
+		origin_article: 0,
+		trans_article: 0
+	};
+	let option = {
+		limit: num,
+	  skip: idx
+	};
+	console.log(option)
+	mongo.find('article_info', conditions, fields, option, function (err, res) {
+		if (err) {
+			response.json({
+				msg: 'error',
+				code: 201
+			})
+		} else {
+			response.json({
+				msg: 'success',
+				code: 0,
+				data: res.data,
+				total: res.total
+			})
+		}
+	})
+})
 // 文章提交
 router.post('/post_article', urlencodedParser, function(request, response, next) {
 	console.log(typeof request.body)
@@ -29,8 +61,11 @@ router.post('/post_article', urlencodedParser, function(request, response, next)
 					saveErr.code = 201;
 					response.json(saveErr);
 				} else {
-					saveRes.code = 0;
-					response.json(saveRes);
+					response.json({
+						code: 0,
+						msg: 'success',
+						data: saveRes
+					});
 				}
 			});
 		}
