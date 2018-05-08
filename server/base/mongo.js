@@ -181,15 +181,26 @@ DB.prototype.remove = function (table_name, conditions, callback) {
  * @param table_name 表名
  * @param conditions 查询条件
  * @param fields 待返回字段
+ * @oaram option 限制条件
  * @param callback 回调方法
  */
-DB.prototype.find = function (table_name, conditions, fields, callback) {
+DB.prototype.find = function (table_name, conditions, fields, option, callback) {
 	var node_model = this.getConnection(table_name);
-	node_model.find(conditions, fields || null, {}, function (err, res) {
+	// fields = {}
+	let count
+	node_model.count(conditions, function (err, res) {
+		if (!err) {
+			count = res
+		}
+	})
+	node_model.find(conditions, fields || null, option, function (err, res) {
 		if (err) {
 			callback(err);
 		} else {
-			callback(null, res);
+			callback(null, {
+				total: count,
+				data: res
+			});
 		}
 	});
 };
