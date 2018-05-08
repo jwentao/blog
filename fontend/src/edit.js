@@ -1,5 +1,5 @@
 import './css/edit.scss'
-import { $ } from './js/util'
+import { $, ajax } from './js/util'
 // 引入showdown 和 showdown高亮
 let showdown  = require('showdown')
 let showdownhighlight = require('showdown-highlight');
@@ -71,5 +71,42 @@ inputText.addEventListener('keydown', e => {
     e.preventDefault()
     return false;
 }, false)
+
+$('#toggle-submit-box').addEventListener('click', e => {
+	let el = $('#toggle-submit-box');
+	let panel = $('#panel');
+	if (el.classList.contains('icon-xialasanjiao')) {
+		el.classList.remove('icon-xialasanjiao');
+		el.classList.add('icon-xialasanjiao-copy');
+		panel.style.display = 'block';
+	} else {
+		el.classList.remove('icon-xialasanjiao-copy');
+		el.classList.add('icon-xialasanjiao');
+		panel.style.display = 'none';
+	}
+}, false)
+
+let tagList = Array.from($('.class-item'))
+tagList.forEach(item => {
+	item.addEventListener('click', e => {
+		tagList.forEach(i => {
+			i.classList.remove('active')
+		})
+		item.classList.add('active')
+	}, false)
+})
+
+async function postArticle () {
+	let data = await ajax('http://localhost/article/post_article', {method: 'post', body: {
+		'title1': '一个测试的标题1',
+		'auth': '测试作者名',
+		'tag': 'tag1,tag2,tag3',
+		'type': 'origin',
+		'origin_article': '####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本####大量的文本',
+		'trans_article': `<h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4><h4>大量的文本</h4>`
+	}})
+	console.log(data)
+}
+// postArticle()
 
 
