@@ -10,7 +10,7 @@
 <body>
     <header class="header">
         <div class="left-box">
-            <input type="text" placeholder="输入文章标题">
+            <input type="text" placeholder="输入文章标题" id="title-value">
         </div>
         <div class="right-box">
             <div class="submit-box">
@@ -19,16 +19,16 @@
                 </div>
                 <div class="panel" id="panel">
                     <p class="title">作者</p>
-                    <input type="text">
+                    <input type="text" id="auth-value">
                     <p class="title">标签(用","分隔)</p>
-                    <input type="text">
+                    <input type="text" id="tag-value">
                     <p class="title">分类</p>
                     <div class="class-box">
-                        <div class="active class-item">原创</div>
-                        <div class="class-item">转载</div>
+                        <div class="active class-item" data-type="1">原创</div>
+                        <div class="class-item" data-type="2">转载</div>
                     </div>
                     <div class="confirm-box">
-                        <p class="confirm">确认发布</p>
+                        <p class="confirm" id="confirm">确认发布</p>
                     </div>
                 </div>
             </div>
