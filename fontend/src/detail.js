@@ -1,6 +1,6 @@
 import './css/detail.scss'
 import {blogPaper} from './tempInfo/blogPaper'
-import {$, generateMainHtml} from './js/util'
+import {$, generateMainHtml, ajax} from './js/util'
 
 $('body')[0].innerHTML = generateMainHtml({activeIdx: -1})
 
@@ -105,3 +105,10 @@ let asideIo = new IntersectionObserver(e => {
 	}
 }, [1])
 asideIo.observe($('.banner')[0])
+
+async function getArticleDetail(id) {
+	let data = await ajax({url: '/article/get_article_detail', method: 'get', data: {id: id}})
+	console.log(data)
+}
+
+getArticleDetail(location.search.split('=')[1])
