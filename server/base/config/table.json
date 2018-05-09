@@ -28,6 +28,8 @@
     "tag": "String",
     "type": "String",
     "origin_article": "String",
-    "trans_article": "String"
+    "trans_article": "String",
+    "time": "String",
+    "last_time": "String"
   }
 }
