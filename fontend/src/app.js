@@ -45,13 +45,25 @@ async function getArticleList () {
 		$('#content').innerHTML = html;
 		$('#entry-list').addEventListener('click', e => {
 			e.stopPropagation();
-			console.log(e.target)
-		}, false)
+			let node = findParentDataSet(e.target, 'id');
+			let id;
+			if (node) {
+				id = node.dataset.id;
+				location.href = `./detail.html?id=${id}`;
+			}
+			console.log(id)
+		}, false);
 	}
 }
 
-function findParentDataSet(node, dateSet) {
-
+function findParentDataSet(node, dataSet) {
+	if(node.dataset[dataSet]) {
+		return node
+	} else if (node.parentNode) {
+		return findParentDataSet(node.parentNode, dataSet)
+	} else {
+		return false
+	}
 }
 
 function transTime(time) {
