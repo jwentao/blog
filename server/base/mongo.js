@@ -102,6 +102,7 @@ DB.prototype.save = function (table_name, fields, callback) {
 	var err_num = 0;
 	for (var i in fields) {
 		if (!this.tabConf[table_name][i]) err_num ++;
+		console.log(i, this.tabConf[table_name][i])
 	}
 	if (err_num > 0) {
 		if (callback) callback({msg: 'Wrong field name'});

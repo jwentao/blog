@@ -46,7 +46,9 @@ router.get('/get_article_list', (request, response, next) => {
 })
 // 文章提交
 router.post('/post_article', urlencodedParser, function(request, response, next) {
-	console.log(typeof request.body)
+	for (let i in request.body) {
+		console.log(i + '---')
+	}
 	mongo.findOne('article_info', {title: request.body.title}, function (err, res) {
 		// 查询数据库中是否已经存在此标题
 		if (res) {
