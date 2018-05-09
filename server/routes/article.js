@@ -44,6 +44,25 @@ router.get('/get_article_list', (request, response, next) => {
 		}
 	})
 })
+router.get('/get_article_detail', (request, response) => {
+	console.log(request.query.id)
+	let id = request.query.id;
+    mongo.findById('article_info', id, (err, res) => {
+        if (err) {
+            response.json({
+                msg: 'error',
+                code: 201
+            })
+        } else {
+        	console.log(res)
+            response.json({
+                msg: 'success',
+                code: 0,
+                data: res
+            })
+        }
+    })
+})
 // 文章提交
 router.post('/post_article', urlencodedParser, function(request, response, next) {
 	for (let i in request.body) {
