@@ -21,7 +21,7 @@ function tree(headerList, e){
 	// 第一次传入时没有e参数，以header数组第一个元素高一级的header为基础，如h1-》h0， h2-》h1
 	if(!e) return listChildren(headerList, {tagName: 'H' + (getLevel(headerList[0]) - 1)})
 	let resultTree = {'headTitle': e.innerText, 'headId': e.id};
-	// 限制只取到h3
+	// 限制只取到最高级往下3级
 	if(getLevel(e) < 3){
 		let children = listChildren(headerList ,e);
 		if(children.length !== 0)
@@ -98,7 +98,6 @@ headerList.forEach(item => {
 })
 
 let asideIo = new IntersectionObserver(e => {
-	console.log('------', e)
 	if (e[0].isIntersecting) {
 		$('.article-catalog')[0].classList.remove('static')
 	} else {

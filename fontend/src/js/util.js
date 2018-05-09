@@ -1,4 +1,12 @@
+let baseUrl = 'http://localhost';
 let nav = ['首页', '分页1', '分页2', '分页3']
+let extend = (dst, obj) => {
+	for (let i in obj) {
+		if (obj.hasOwnProperty(i)) {
+			dst[i] = obj[i];
+		}
+	}
+};
 /*
 	生成html的躯干
 	options包含
@@ -76,16 +84,69 @@ export let $ = el => {
 	return document.querySelectorAll(el)
 }
 
-export let ajax = (url, option) => {
-	return new Promise((resolve, rej) => {
-		fetch(url, option).then(response => {
-			if (response.status >= 200 && response.status < 300) {
-				return resolve(response.json())
-			} else {
-				return rej(response)
+// export let ajax = (url, option) => {
+// 	return new Promise((resolve, rej) => {
+// 		fetch(url, option).then(response => {
+// 			if (response.status >= 200 && response.status < 300) {
+// 				return resolve(response.json())
+// 			} else {
+// 				return rej(response)
+// 			}
+// 		}).catch(error => {
+// 			return rej(error)
+// 		})
+// 	})
+// }
+
+export let ajax = function (options) {
+	return new Promise((resolve, reject) => {
+		let opt = {
+			url: '',
+			type: 'get',
+			data: {},
+			success: function () {},
+			error: function () {},
+		};
+		extend(opt, options);
+		if (opt.url) {
+			let xhr = XMLHttpRequest
+				? new XMLHttpRequest()
+				: new ActiveXObject('Microsoft.XMLHTTP');
+			let data = opt.data,
+				url = baseUrl + opt.url,
+				type = opt.type.toUpperCase(),
+				dataArr = [];
+			for (let k in data) {
+				dataArr.push(k + '=' + data[k]);
 			}
-		}).catch(error => {
-			return rej(error)
-		})
+			if (type === 'GET') {
+				url = url + '?' + dataArr.join('&');
+				xhr.open(type, url.replace(/\?$/g, ''), true);
+				xhr.send();
+			}
+			if (type === 'POST') {
+				xhr.open(type, url, true);
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xhr.send(dataArr.join('&'));
+			}
+			xhr.onload = function () {
+				if (xhr.status === 200 || xhr.status === 304) {
+					let res;
+					if (opt.success && opt.success instanceof Function) {
+						res = xhr.responseText;
+						if (typeof res === 'string') {
+							res = JSON.parse(res);
+							// opt.success.call(xhr, res);
+							return resolve(res)
+						}
+					}
+				} else {
+					if (opt.error && opt.error instanceof Function) {
+						// opt.error.call(xhr, res);
+						return reject(res)
+					}
+				}
+			};
+		}
 	})
-}
+};

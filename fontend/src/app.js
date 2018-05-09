@@ -1,32 +1,63 @@
 import './css/index.scss'
 // import 'babel-polyfill'
-import { $ } from './js/util'
-
+import { $, ajax, generateMainHtml } from './js/util'
+$('body')[0].innerHTML = generateMainHtml({activeIdx: 0})
 $('.phone-show-menu')[0].addEventListener('click', e => {
 	console.log(e)
 	let showEl = $('.pc-show')[0]
 	showEl.classList.toggle('show')
 }, false)
-console.log('this is index')
 
-let func = () => {}
-const NUM = 45
-let arr = [1, 2, 4]
-let newArr = arr.map(item => item + NUM)
-function* funca() {}
-let [a, b, c] = [1, 2, 3]
-new Promise((res, rej) => {
-	setTimeout(() => {
-		res('success')
-	}, 1000)
-}).then(res => {
-	console.log(res)
-})
+getArticleList()
 
-let s1 = Symbol('foo');
-let s2 = Symbol('bar');
 
-console.log(s1, s2)
-console.log(a, b, c)
-console.log(new Set(newArr))
-function* funca() {}
+async function getArticleList () {
+	let data = await ajax({url: '/article/get_article_list', type: 'GET', data: {
+		idx: 0,
+		num: 10
+	}})
+	console.log(data)
+	if (data.code === 0) {
+		let html = `<ul class="entry-list" id="entry-list">`
+		for (let i in data.data) {
+			let item = data.data[i];
+			let tagArr = data.data[i].tag.split(',');
+			let tagHtml = ''
+			for (let tagIdx in tagArr) {
+				tagHtml += `<li class="meta-item">${tagArr[tagIdx]}</li>`
+			}
+			html += `<li class="item" data-id="${item._id}">
+								<div class="content-box">
+									<div class="meta-row">
+										<ul class="meta-list">
+											${tagHtml}
+										</ul>
+									</div>
+									<div class="title-row">
+										<p class="title">${item.title}</p>
+									</div>
+									<div class="time-row">
+										<p class="time">${transTime(item.time)}</p>
+									</div>
+								</div>
+								</li>`
+		}
+		$('#content').innerHTML = html;
+		$('#entry-list').addEventListener('click', e => {
+			e.stopPropagation();
+			console.log(e.target)
+		}, false)
+	}
+}
+
+function findParentDataSet(node, dateSet) {
+
+}
+
+function transTime(time) {
+	if (typeof time !== "number") {
+		time = Number(time);
+	}
+	let date = new Date(time);
+	return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
+}
