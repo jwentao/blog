@@ -1,0 +1,33 @@
+@import './common/base';
+@import './common/layout';
+.main {
+  position: absolute;
+  width: 100%;
+  // 覆盖掉mar-width: 980
+  max-width: 100%!important;
+  top: 0;
+  bottom: 0;
+  background-color: #fff;
+  margin-top: 60px;
+  .container {
+    .iconfont {
+      font-size: 30rem;
+      color: $themeColor;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .back-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .back-index {
+        padding: 1.1rem 2rem;
+        font-size: 1.5rem;
+        border-radius: 5px;
+        color: #fff;
+        background-color: $themeColor;
+      }
+    }
+  }
+}

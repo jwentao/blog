@@ -87,7 +87,8 @@ const generateConfig = env => {
 		entry: {
 			app: './src/app.js',
 			detail: './src/detail.js',
-			edit: './src/edit.js'
+			edit: './src/edit.js',
+			error: './src/error.js'
 		},
 
 		output: {
@@ -177,6 +178,14 @@ const generateConfig = env => {
 					collapseWhitespace: true
 				},
 				chunks: ['edit']
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'error.html',
+				template: './error.html',
+				minify: {
+					collapseWhitespace: true
+				},
+				chunks: ['error']
 			})
 		]
 	}

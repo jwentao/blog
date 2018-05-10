@@ -7,10 +7,14 @@ let extend = (dst, obj) => {
 		}
 	}
 };
+let showdown = require('showdown')
+let showdownhighlight = require('showdown-highlight');
+
 /*
-	生成html的躯干
-	options包含
+ 生成html的躯干
+ options包含
  * @key  {[number]} activeIdx [对应nav数组的idx，将数组的这个元素设置为active]
+ * @needBanner 是否生成banner，默认为true
  * 待扩展
  */
 export let generateMainHtml = options => {
@@ -20,6 +24,7 @@ export let generateMainHtml = options => {
 		liList += options.activeIdx === index ? 'class="active"' : ''
 		liList += `>${item}</a></li>`
 	}
+	let needBanner = options.needBanner === undefined ? true : options.needBanner;
 	let head = `<header class="header">
         <div class="container">
             <a href="/" class="iconfont icon-blogger"></a>
@@ -47,8 +52,9 @@ export let generateMainHtml = options => {
     </header>`
 	let main = `<div class="main" id="main">
         <div class="content" id="content">
-        </div>
-        <div class="aside" id="aside">
+        </div>`
+			if (needBanner) {
+				main += `<div class="aside" id="aside">
             <div class="banner">
                 <div class="personal-info">
                     <div class="card-bar">
@@ -71,41 +77,33 @@ export let generateMainHtml = options => {
                     </div>
                 </div>
             </div>
-        </div>
-    </div>`
+        </div>`
+			}
+    `</div>`
 	return head + main
+};
+export let generateErrorHtml = () => {
+
 }
 /*
-	css选择器
-	除#id外，其余都返回数组
+ css选择器
+ 除#id外，其余都返回数组
  */
 export let $ = el => {
 	if (/^#/.test(el)) return document.querySelector(el)
 	return document.querySelectorAll(el)
 }
 
-// export let ajax = (url, option) => {
-// 	return new Promise((resolve, rej) => {
-// 		fetch(url, option).then(response => {
-// 			if (response.status >= 200 && response.status < 300) {
-// 				return resolve(response.json())
-// 			} else {
-// 				return rej(response)
-// 			}
-// 		}).catch(error => {
-// 			return rej(error)
-// 		})
-// 	})
-// }
-
+/*
+ 封装了一个ajax请求，只支持get和post
+ options包括url,type(默认为get),data,后面两个可以为空
+ */
 export let ajax = function (options) {
 	return new Promise((resolve, reject) => {
 		let opt = {
 			url: '',
 			type: 'get',
-			data: {},
-			success: function () {},
-			error: function () {},
+			data: {}
 		};
 		extend(opt, options);
 		if (opt.url) {
@@ -132,21 +130,36 @@ export let ajax = function (options) {
 			xhr.onload = function () {
 				if (xhr.status === 200 || xhr.status === 304) {
 					let res;
-					if (opt.success && opt.success instanceof Function) {
-						res = xhr.responseText;
-						if (typeof res === 'string') {
-							res = JSON.parse(res);
-							// opt.success.call(xhr, res);
-							return resolve(res)
-						}
+					res = xhr.responseText;
+					if (typeof res === 'string') {
+						res = JSON.parse(res);
+						return resolve(res)
 					}
 				} else {
-					if (opt.error && opt.error instanceof Function) {
-						// opt.error.call(xhr, res);
 						return reject(res)
-					}
 				}
 			};
 		}
 	})
 };
+
+/**
+ * markdown转html
+ * @param markdownStr markdown语法的字符串
+ * @return html
+ */
+export let markdown2html = markdownStr => {
+	// 创建shoudown对象
+	let converter = new showdown.Converter({
+		extensions: [showdownhighlight]
+	});
+	let text = converter.makeHtml(markdownStr)
+	// showdown解析四个空格开头的代码块，会出现hljs字符，这里先暴力替换掉
+	text = text.replace(/>hljs/g, '>')
+	// 序列化h1的id
+	let idx = 0
+	text = text.replace(/(<h[1-6][\S|\s]+?id=["|'])([\w|\-]*)(['|"])/g, function (a, b, c, d) {
+		return b + 'heading-' + idx++ + d
+	})
+	return text
+}
