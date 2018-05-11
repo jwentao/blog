@@ -15,13 +15,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    //justify-content: center;
     .iconfont {
       font-size: 30rem;
       color: $themeColor;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    .icon {
+      font-size: 40rem;
     }
     .back-box {
       display: flex;

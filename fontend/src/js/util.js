@@ -82,8 +82,23 @@ export let generateMainHtml = options => {
     `</div>`
 	return head + main
 };
+/**
+ * markdown转html
+ * @param markdownStr markdown语法的字符串
+ * @return html
+ */
 export let generateErrorHtml = () => {
+	let html = `<div class="container">
+        <!--<p class="iconfont icon-icon-test1"></p>-->
+        <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-icon-test1"></use>
+        </svg>
 
+        <div class="back-box">
+            <a href="./index.html" class="back-index">回到首页</a>
+        </div>
+    </div>`;
+	return html;
 }
 /*
  css选择器
@@ -162,4 +177,17 @@ export let markdown2html = markdownStr => {
 		return b + 'heading-' + idx++ + d
 	})
 	return text
+};
+
+/**
+ * 导入svg图标
+ * @param
+ * @return html
+ */
+export let importSvg = () => {
+	let script = document.createElement('script');
+	script.setAttribute('type', 'text/javascript');
+	script.setAttribute('src', baseUrl + '/static/js/iconfont.js');
+	if (document.querySelector('head')) document.querySelector('head').appendChild(script);
+	else document.documentElement.appendChild(script);
 }

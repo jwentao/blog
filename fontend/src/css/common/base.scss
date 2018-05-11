@@ -14,6 +14,13 @@ a {
     color: #71777c;
     cursor: pointer;
 }
+// for svg
+.icon {
+    width: 1em; height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
 $themeColor: #006cff;
 $black: #333;
 $lightGray: #71777c;
