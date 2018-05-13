@@ -1,5 +1,6 @@
 import './css/detail.scss';
-import {$, generateMainHtml, ajax, markdown2html} from './js/util';
+import './css/error.scss';
+import {$, generateMainHtml, ajax, markdown2html, generateErrorHtml, importSvg} from './js/util';
 
 let method = {
 	/**
@@ -10,12 +11,17 @@ let method = {
 	async getArticleDetail(id) {
 		let data = await ajax({url: '/article/get_article_detail', method: 'get', data: {id: id}});
 		console.log(data)
-		let html = markdown2html(data.data.origin_article);
-		$('#content').innerHTML = `<div class="article-box"><h1 class="article-title">${data.data.title}</h1>
+		if (data.code !== 0) {
+            $('#main').insertAdjacentHTML('afterEnd', generateErrorHtml())
+            importSvg()
+		} else {
+            let html = markdown2html(data.data.origin_article);
+            $('#content').innerHTML = `<div class="article-box"><h1 class="article-title">${data.data.title}</h1>
 													 <div id="article-body" class="markdown-body">${html}</div></div>`;
-		let headerList = Array.from($('#article-body').querySelectorAll("h1,h2,h3,h4,h5,h6"));
-		this.generateHeadList(headerList)
-		this.bindEvent(headerList)
+            let headerList = Array.from($('#article-body').querySelectorAll("h1,h2,h3,h4,h5,h6"));
+            this.generateHeadList(headerList)
+            this.bindEvent(headerList)
+		}
 	},
 	/**
 	 * 根据id请求文章

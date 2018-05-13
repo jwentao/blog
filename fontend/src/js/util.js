@@ -88,7 +88,7 @@ export let generateMainHtml = options => {
  * @return html
  */
 export let generateErrorHtml = () => {
-	let html = `<div class="container">
+	let html = `<div class="err-main"><div class="container">
         <!--<p class="iconfont icon-icon-test1"></p>-->
         <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-icon-test1"></use>
@@ -97,7 +97,7 @@ export let generateErrorHtml = () => {
         <div class="back-box">
             <a href="./index.html" class="back-index">回到首页</a>
         </div>
-    </div>`;
+    </div></div>`;
 	return html;
 }
 /*
