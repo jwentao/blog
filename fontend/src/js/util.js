@@ -40,8 +40,8 @@ export let generateMainHtml = options => {
                 </li>
                 <li class="search-bar">
                     <form action="" role="search" class="search-form">
-                        <input type="text" placeholder="搜索" class="search-input">
-                        <span class="iconfont icon-sousuo"></span>
+                        <input type="text" placeholder="搜索" class="search-input" id="search-input">
+                        <span class="iconfont icon-sousuo" id="search-btn"></span>
                     </form>
                 </li>
                 <li class="user-bar">
@@ -82,6 +82,34 @@ export let generateMainHtml = options => {
     `</div>`
 	return head + main
 };
+
+export let generateEntryList = data => {
+	let html = `<ul class="entry-list" id="entry-list">`
+	for (let i in data.data) {
+		let item = data.data[i];
+		let tagArr = data.data[i].tag.split(',');
+		let tagHtml = ''
+		for (let tagIdx in tagArr) {
+			tagHtml += `<li class="meta-item">${tagArr[tagIdx]}</li>`
+		}
+		html += `<li class="item" data-id="${item._id}">
+								<div class="content-box">
+									<div class="meta-row">
+										<ul class="meta-list">
+											${tagHtml}
+										</ul>
+									</div>
+									<div class="title-row">
+										<p class="title">${item.title}</p>
+									</div>
+									<div class="time-row">
+										<p class="time">${transTime(item.time)}</p>
+									</div>
+								</div>
+								</li>`
+	}
+	return html;
+}
 /**
  * markdown转html
  * @param markdownStr markdown语法的字符串
@@ -190,4 +218,12 @@ export let importSvg = () => {
 	script.setAttribute('src', baseUrl + '/static/js/iconfont.js');
 	if (document.querySelector('head')) document.querySelector('head').appendChild(script);
 	else document.documentElement.appendChild(script);
+};
+
+function transTime(time) {
+	if (typeof time !== "number") {
+		time = Number(time);
+	}
+	let date = new Date(time);
+	return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
 }
