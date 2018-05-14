@@ -3,6 +3,11 @@ import './css/search.scss';
 import { $, ajax, generateMainHtml, generateEntryList } from './js/util';
 $('body')[0].innerHTML = generateMainHtml({activeIdx: 0});
 searchByTitle(getQueryValue('title'));
+
+$('#search-btn').addEventListener('click', e => {
+    let input = $('#search-input').value;
+    searchByTitle(input);
+}, false);
 async function searchByTitle (title) {
 	let data = await ajax({url: '/article/search_by_title', type: 'GET', data: {
 		idx: 0,

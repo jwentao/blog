@@ -6,7 +6,7 @@ $('body')[0].innerHTML = generateMainHtml({activeIdx: 0});
 $('#search-btn').addEventListener('click', e => {
 	let input = $('#search-input').value;
 	console.log(input)
-	searchByTitle(input)
+	location.href = './search.html?title=' + input;
 }, false);
 
 $('.phone-show-menu')[0].addEventListener('click', e => {
