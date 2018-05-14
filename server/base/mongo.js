@@ -1,31 +1,13 @@
-// const MongoClient = require('mongodb').MongoClient
-// const url = 'mongodb://localhost:27017/test1'
-//
-// MongoClient.connect(url, function (err, db) {
-// 	if (err) throw err;
-// 	console.log('数据库已创建');
-// 	let dbase = db.db("test1");
-// 	dbase.createCollection('site', function (err, res) {
-// 		if (err) throw err;
-// 		console.log("创建集合!");
-// 		db.close();
-// 	});
-// });
-//
-// function insert() {
-//
-// }
-
 /**
  * mongoose操作类(封装mongodb)
  */
 
-var fs = require('fs');
-var path = require('path');
-var mongoose = require('mongoose');
-var logger = require('pomelo-logger').getLogger('mongodb-log');
+let fs = require('fs');
+let path = require('path');
+let mongoose = require('mongoose');
+let logger = require('pomelo-logger').getLogger('mongodb-log');
 
-var options = {
+let options = {
 	db_user: "",
 	db_pwd: "",
 	db_host: "localhost",
@@ -33,7 +15,7 @@ var options = {
 	db_name: "test1"
 };
 
-var dbURL = "mongodb://" + options.db_user + ":" + options.db_pwd + "@" + options.db_host + ":" + options.db_port + "/" + options.db_name;
+let dbURL = "mongodb://" + options.db_user + ":" + options.db_pwd + "@" + options.db_host + ":" + options.db_port + "/" + options.db_name;
 dbURL = 'mongodb://localhost:27017/test1'
 mongoose.connect(dbURL);
 
@@ -57,9 +39,9 @@ process.on('SIGINT', function () {
 	});
 });
 
-var DB = function () {
+let DB = function () {
 	this.mongoClient = {};
-	var filename = path.join(path.dirname(__dirname), 'base/config/table.json');
+	let filename = path.join(path.dirname(__dirname), 'base/config/table.json');
 	this.tabConf = JSON.parse(fs.readFileSync(path.normalize(filename)));
 };
 
@@ -74,10 +56,10 @@ DB.prototype.getConnection = function (table_name) {
 		return false;
 	}
 
-	var client = this.mongoClient[table_name];
+	let client = this.mongoClient[table_name];
 	if (!client) {
 		//构建用户信息表结构
-		var nodeSchema = new mongoose.Schema(this.tabConf[table_name]);
+		let nodeSchema = new mongoose.Schema(this.tabConf[table_name]);
 
 		//构建model
 		client = mongoose.model(table_name, nodeSchema, table_name);
@@ -99,18 +81,17 @@ DB.prototype.save = function (table_name, fields, callback) {
 		return false;
 	}
 
-	var err_num = 0;
-	for (var i in fields) {
+	let err_num = 0;
+	for (let i in fields) {
 		if (!this.tabConf[table_name][i]) err_num ++;
-		console.log(i, this.tabConf[table_name][i])
 	}
 	if (err_num > 0) {
 		if (callback) callback({msg: 'Wrong field name'});
 		return false;
 	}
 
-	var node_model = this.getConnection(table_name);
-	var mongooseEntity = new node_model(fields);
+	let node_model = this.getConnection(table_name);
+	let mongooseEntity = new node_model(fields);
 	mongooseEntity.save(function (err, res) {
 		if (err) {
 			if (callback) callback(err);
@@ -132,7 +113,7 @@ DB.prototype.update = function (table_name, conditions, update_fields, callback)
 		if (callback) callback({msg: 'Parameter error'});
 		return;
 	}
-	var node_model = this.getConnection(table_name);
+	let node_model = this.getConnection(table_name);
 	node_model.update(conditions, {$set: update_fields}, {multi: true, upsert: true}, function (err, res) {
 		if (err) {
 			if (callback) callback(err);
@@ -154,7 +135,7 @@ DB.prototype.updateData = function (table_name, conditions, update_fields, callb
 		if (callback) callback({msg: 'Parameter error'});
 		return;
 	}
-	var node_model = this.getConnection(table_name);
+	let node_model = this.getConnection(table_name);
 	node_model.findOneAndUpdate(conditions, update_fields, {multi: true, upsert: true}, function (err, data) {
 		if (callback) callback(err, data);
 	});
@@ -167,7 +148,7 @@ DB.prototype.updateData = function (table_name, conditions, update_fields, callb
  * @param callback 回调方法
  */
 DB.prototype.remove = function (table_name, conditions, callback) {
-	var node_model = this.getConnection(table_name);
+	let node_model = this.getConnection(table_name);
 	node_model.remove(conditions, function (err, res) {
 		if (err) {
 			if (callback) callback(err);
@@ -186,7 +167,7 @@ DB.prototype.remove = function (table_name, conditions, callback) {
  * @param callback 回调方法
  */
 DB.prototype.find = function (table_name, conditions, fields, option, callback) {
-	var node_model = this.getConnection(table_name);
+	let node_model = this.getConnection(table_name);
 	// fields = {}
 	let count
 	node_model.count(conditions, function (err, res) {
@@ -213,7 +194,7 @@ DB.prototype.find = function (table_name, conditions, fields, option, callback) 
  * @param callback 回调方法
  */
 DB.prototype.findOne = function (table_name, conditions, callback) {
-	var node_model = this.getConnection(table_name);
+	let node_model = this.getConnection(table_name);
 	node_model.findOne(conditions, function (err, res) {
 		if (err) {
 			callback(err);
@@ -230,7 +211,7 @@ DB.prototype.findOne = function (table_name, conditions, callback) {
  * @param callback 回调方法
  */
 DB.prototype.findById = function (table_name, _id, callback) {
-	var node_model = this.getConnection(table_name);
+	let node_model = this.getConnection(table_name);
 	node_model.findById(_id, function (err, res){
 		if (err) {
 			callback(err);
@@ -247,7 +228,7 @@ DB.prototype.findById = function (table_name, _id, callback) {
  * @param callback 回调方法
  */
 DB.prototype.count = function (table_name, conditions, callback) {
-	var node_model = this.getConnection(table_name);
+	let node_model = this.getConnection(table_name);
 	node_model.count(conditions, function (err, res) {
 		if (err) {
 			callback(err);
@@ -265,7 +246,7 @@ DB.prototype.count = function (table_name, conditions, callback) {
  * @param callback 回调方法
  */
 DB.prototype.distinct = function (table_name, field, conditions, callback) {
-	var node_model = this.getConnection(table_name);
+	let node_model = this.getConnection(table_name);
 	node_model.distinct(field, conditions, function (err, res) {
 		if (err) {
 			callback(err);
@@ -283,7 +264,7 @@ DB.prototype.distinct = function (table_name, field, conditions, callback) {
  * @param callback 回调方法
  */
 DB.prototype.where = function (table_name, conditions, options, callback) {
-	var node_model = this.getConnection(table_name);
+	let node_model = this.getConnection(table_name);
 	node_model.find(conditions)
 		.select(options.fields || '')
 		.sort(options.sort || {})
