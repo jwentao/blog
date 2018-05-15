@@ -173,6 +173,12 @@
                 }
             }
         }
+        .no-result {
+            display: none;
+        }
+    }
+    .sentinels {
+        height: 2rem;
     }
     .aside {
         position: absolute;

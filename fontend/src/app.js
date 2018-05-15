@@ -25,9 +25,9 @@ async function getArticleList () {
 	}});
 	console.log(data)
 	if (data.code === 0) {
-		let html = generateEntryList(data);
-		$('#content').innerHTML = generateEntryList(data);
-		$('#entry-list').addEventListener('click', e => {
+		let entryList = $('#entry-list');
+		entryList.insertAdjacentHTML('beforeEnd', generateEntryList(data));
+		entryList.addEventListener('click', e => {
 			e.stopPropagation();
 			let node = findParentDataSet(e.target, 'id');
 			let id;

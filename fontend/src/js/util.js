@@ -52,7 +52,11 @@ export let generateMainHtml = options => {
     </header>`
 	let main = `<div class="main" id="main">
         <div class="content" id="content">
-        </div>`
+        <ul class="entry-list" id="entry-list"></ul>
+        <div class="no-result">
+		<p class="text">列表为空</p>
+		</div>
+        </div><div class="sentinels" id="sentinels"></div>`
 			if (needBanner) {
 				main += `<div class="aside" id="aside">
             <div class="banner">
@@ -79,12 +83,12 @@ export let generateMainHtml = options => {
             </div>
         </div>`
 			}
-    `</div>`
+	main += `</div>`;
 	return head + main
 };
 
 export let generateEntryList = data => {
-	let html = `<ul class="entry-list" id="entry-list">`
+	let html = ``
 	for (let i in data.data) {
 		let item = data.data[i];
 		let tagArr = data.data[i].tag.split(',');
