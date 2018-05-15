@@ -8,6 +8,7 @@ const rfs = require('rotating-file-stream');
 const http = require('http');
 const app = express();
 const articleRouter = require('./routes/article');
+const userRouter = require('./routes/user');
 
 /* 日志 */
 const logDirectory = path.join(__dirname, 'log');
@@ -59,6 +60,7 @@ app.get('/test/:who', function(request, response) {
 	response.end("Hello, " + request.params.who + ".");
 });
 app.use('/article', articleRouter);
+app.use('/user', userRouter);
 
 
 // 前面都不匹配，则路由错误。返回 404 页面
