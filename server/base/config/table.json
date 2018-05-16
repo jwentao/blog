@@ -31,5 +31,11 @@
     "trans_article": "String",
     "time": "String",
     "last_time": "String"
+  },
+  "user_info": {
+    "id": "String",
+    "psw": "String",
+    "admin": "Boolean",
+    "nick_name": "String"
   }
 }

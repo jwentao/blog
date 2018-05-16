@@ -9,6 +9,7 @@ const http = require('http');
 const app = express();
 const articleRouter = require('./routes/article');
 const userRouter = require('./routes/user');
+const jwtDecode = require("express-jwt");
 
 /* 日志 */
 const logDirectory = path.join(__dirname, 'log');
@@ -49,8 +50,13 @@ app.all('*', function(req, res, next) {
 /* 静态文件处理 */
 // 所有的请求通过这个中间件，如果没有文件被找到的话会继续前进
 let publicPath = path.resolve(__dirname, "../fontend/dist");
-app.use(express.static(publicPath))
+app.use(express.static(publicPath));
 
+// app.use(jwtDecode({
+// 	secret: 'tokentest'
+// }).unless({
+// 	path: ['/user/login']  //除了这个地址，其他的URL都需要验证
+// }));
 // 模板引擎
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -76,6 +82,15 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
 	console.log('------------------');
+	if (err.name === 'UnauthorizedError') {
+		//  这个需要根据自己的业务逻辑来处理（ 具体的err值 请看下面）
+		// res.status(401).send('invalid token...');
+		res.json({
+			code: 500,
+			msg: 'invalid token'
+		});
+		return;
+	}
 	// set locals, only providing error in development
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
