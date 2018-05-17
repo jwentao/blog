@@ -1,5 +1,5 @@
 import './css/manage.scss';
-import { $, ajax, generateMainHtml } from './js/util';
+import { $, ajax } from './js/util';
 let global = {
 	idx: 0,
 	num: 20,
@@ -18,6 +18,7 @@ let io = new IntersectionObserver(e => {
 	}
 });
 io.observe($('#sentinels'));
+// 获取文章
 async function getArticleList () {
 	let data = await ajax({url: '/article/get_article_list', type: 'GET', data: {
 		idx: global.idx,
@@ -42,13 +43,25 @@ async function getArticleList () {
 		// entryList.insertAdjacentHTML('beforeEnd', generateEntryList(data));
 	}
 }
-
+// 删除文章
+async function deleteArticle(node) {
+    let data = await ajax({url: '/article/delete_article', type: 'GET', data: {
+        _id: node.dataset.id
+    }});
+    console.log(data)
+	if (data.code === 0) {
+    	node.remove();
+	}
+}
 entryList.addEventListener('click', e => {
 	e.stopPropagation();
 	let classList = e.target.classList;
 	console.log(classList)
 	if (classList.contains('delete')) {
 		console.log('delete', e.target.parentNode.dataset.id);
+		let parentNode = e.target.parentNode;
+        deleteArticle(parentNode)
+
 	} else if (classList.contains('modify')) {
 		console.log('modify');
 		location.href = './edit.html?id=' + e.target.parentNode.dataset.id;

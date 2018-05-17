@@ -13,8 +13,9 @@ let postInfo = {
 	auth: '', // 作者
 	tag: '', // 标签
 	type: '1', // 1为原创，2为转载
+	time: 0,
 	origin_article: '' // 原文(markdowm语法)
-}
+};
 
 let inputText = $('#text-input')
 let contentText = $('#content')
@@ -115,9 +116,15 @@ $('#confirm').addEventListener('click', e => {
 	postInfo.auth = $('#auth-value').value;
 	postInfo.tag = $('#tag-value').value;
 	postInfo.origin_article = inputText.value;
-	postInfo.time = new Date().getTime();
 	postInfo.last_time = new Date().getTime();
-	postArticle(postInfo)
+	if (id) {
+		console.log('has id')
+		postInfo._id = id;
+        updateArticle(postInfo)
+	} else {
+        postInfo.time = postInfo.last_time;
+        postArticle(postInfo)
+	}
 }, false);
 // 发布文章
 async function postArticle(postInfo) {
@@ -126,6 +133,13 @@ async function postArticle(postInfo) {
 	});
 	console.log(data)
 	return data;
+}
+async function updateArticle(postInfo) {
+    let data = await ajax({
+        url: '/article/update_article', type: 'POST', data: postInfo
+    });
+    console.log(data)
+    return data;
 }
 // postArticle()
 if (id) {
@@ -141,6 +155,7 @@ async function getArticleInfo(id) {
 	$('#title-value').value = data.data.title;
 	$('#auth-value').value = data.data.auth;
 	$('#tag-value').value = data.data.tag;
+    postInfo.time = data.data.time;
 	tagList[Number(data.data.type) - 1].click();
 }
 

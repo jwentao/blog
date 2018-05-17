@@ -22,5 +22,6 @@ async function login(id, psw) {
 	if (data.code === 0 && data.token) {
 		localStorage.setItem('accesstoken', data.token);
 		localStorage.setItem('id', id);
+		location.href = './manage.html';
 	}
 }

@@ -32,9 +32,12 @@ router.post('/login', urlencodedParser, (request, response, next) => {
                     code: 0,
                     msg: 'success',
                     token: token
-                })
+                });
             } else {
-
+                response.json({
+                    code: 0,
+                    msg: 'error id or password'
+                });
             }
         })
     } else {
