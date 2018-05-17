@@ -1,0 +1,56 @@
+@import './common/base';
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("http://47.106.128.227/static/img/bg.jpg");
+  background-repeat: no-repeat;
+  background-size:100% 100%;
+  .login-bar {
+    width: 35rem;
+    height: 22rem;
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    .title {
+      text-align: center;
+      flex: 1;
+      font-size: 2rem;
+      line-height: 5rem;
+    }
+    .item-bar {
+      display: flex;
+      flex: 1;
+      padding: 0.5rem 2rem;
+      input {
+        outline: none;
+        border: none;
+        width: 100%;
+        border-bottom: 1px $lightGray solid;
+      }
+    }
+    .sub-bar {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .sub-btn {
+        background-color: $themeColor;
+        width: 10rem;
+        height: 4rem;
+        text-align: center;
+        line-height: 4rem;
+        font-size: 2rem;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
+}
