@@ -12,8 +12,8 @@ let method = {
 		let data = await ajax({url: '/article/get_article_detail', method: 'get', data: {id: id}});
 		console.log(data)
 		if (data.code !== 0) {
-            $('#main').insertAdjacentHTML('afterEnd', generateErrorHtml())
-            importSvg()
+            $('#main').insertAdjacentHTML('afterEnd', generateErrorHtml());
+            importSvg();
 		} else {
             let html = markdown2html(data.data.origin_article);
             $('#content').innerHTML = `<div class="article-box"><h1 class="article-title">${data.data.title}</h1>

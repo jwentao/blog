@@ -102,6 +102,36 @@ router.post('/post_article', urlencodedParser, function(request, response, next)
 	});
 });
 /**
+ * 更新文章
+ * @param title 文章标题
+ *
+ */
+router.post('/post_article', urlencodedParser, function(request, response, next) {
+	mongo.findOne('article_info', {title: request.body.title}, function (err, res) {
+		// 查询数据库中是否已经存在此标题
+		if (res) {
+			response.json({
+				code: 101,
+				msg: 'title already exist'
+			})
+		} else {
+			mongo.save('article_info', request.body, function (saveErr, saveRes) {
+				console.log(saveErr, saveRes);
+				if (saveErr) {
+					saveErr.code = 201;
+					response.json(saveErr);
+				} else {
+					response.json({
+						code: 0,
+						msg: 'success',
+						data: saveRes
+					});
+				}
+			});
+		}
+	});
+});
+/**
  * 根据关键字搜索文章
  * @param id 文章id
  */

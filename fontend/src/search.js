@@ -1,6 +1,6 @@
 import './css/search.scss';
 // import 'babel-polyfill'
-import { $, ajax, generateMainHtml, generateEntryList } from './js/util';
+import { $, ajax, generateMainHtml, generateEntryList, getQueryValue } from './js/util';
 let global = {
 	idx: 0,
 	num: 10,
@@ -72,7 +72,3 @@ function findParentDataSet(node, dataSet) {
 	}
 }
 
-function getQueryValue(key){
-	let match=location.search.match(new RegExp(key+'=([^&]*)'));
-	return match&&match[1]||'';
-}

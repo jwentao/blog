@@ -1,5 +1,5 @@
 let baseUrl = 'http://localhost';
-let nav = ['首页', '分页1', '分页2', '分页3']
+let nav = ['首页', '分页1', '分页2', '分页3'];
 let extend = (dst, obj) => {
 	for (let i in obj) {
 		if (obj.hasOwnProperty(i)) {
@@ -7,7 +7,7 @@ let extend = (dst, obj) => {
 		}
 	}
 };
-let showdown = require('showdown')
+let showdown = require('showdown');
 let showdownhighlight = require('showdown-highlight');
 
 /*
@@ -18,9 +18,9 @@ let showdownhighlight = require('showdown-highlight');
  * 待扩展
  */
 export let generateMainHtml = options => {
-	let liList = ''
+	let liList = '';
 	for (let [index, item] of nav.entries()) {
-		liList += '<li class="nav-item"><a href="" '
+		liList += '<li class="nav-item"><a href="" ';
 		liList += options.activeIdx === index ? 'class="active"' : ''
 		liList += `>${item}</a></li>`
 	}
@@ -210,7 +210,10 @@ export let markdown2html = markdownStr => {
 	})
 	return text
 };
-
+export let getQueryValue = (key) => {
+	let match=location.search.match(new RegExp(key+'=([^&]*)'));
+	return match&&match[1]||'';
+}
 /**
  * 导入svg图标
  * @param

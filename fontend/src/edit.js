@@ -1,5 +1,5 @@
 import './css/edit.scss'
-import {$, ajax} from './js/util'
+import {$, ajax, getQueryValue} from './js/util'
 // 引入showdown 和 showdown高亮
 let showdown = require('showdown')
 let showdownhighlight = require('showdown-highlight');
@@ -19,7 +19,15 @@ let postInfo = {
 let inputText = $('#text-input')
 let contentText = $('#content')
 let text = '';
+let id = getQueryValue('id');
 inputText.addEventListener('keyup', e => {
+	onTextChange()
+}, false);
+inputText.addEventListener('blur', e => {
+	onTextChange()
+}, false);
+
+function onTextChange() {
 	text = converter.makeHtml(inputText.value)
 	// showdown解析四个空格开头的代码块，会出现hljs字符，这里先暴力替换掉
 	text = text.replace(/>hljs/g, '>')
@@ -28,9 +36,8 @@ inputText.addEventListener('keyup', e => {
 	text = text.replace(/(<h[1-6][\S|\s]+?id=["|'])([\w|\-]*)(['|"])/g, function (a, b, c, d) {
 		return b + 'heading-' + idx++ + d
 	})
-	contentText.innerHTML = text
-	console.log(text)
-}, false)
+	contentText.innerHTML = text;
+}
 
 HTMLTextAreaElement.prototype.getCaretPosition = function () {
 //return the caret position of the textarea
@@ -71,9 +78,7 @@ inputText.addEventListener('keydown', e => {
 	// tab占两个空格
 	let tab = '  '
 	let newCaretPosition;
-	console.log(inputText.getCaretPosition())
 	newCaretPosition = inputText.getCaretPosition() + tab.length;
-	console.log(newCaretPosition)
 	inputText.value = inputText.value.substring(0, inputText.getCaretPosition()) + tab + inputText.value.substring(inputText.getCaretPosition(), inputText.value.length);
 	inputText.setCaretPosition(newCaretPosition);
 	e.preventDefault()
@@ -94,7 +99,7 @@ $('#toggle-submit-box').addEventListener('click', e => {
 	}
 }, false)
 // 切换发布box里的标签
-let tagList = Array.from($('.class-item'))
+let tagList = Array.from($('.class-item'));
 tagList.forEach(item => {
 	item.addEventListener('click', e => {
 		postInfo.type = e.target.dataset.type
@@ -112,9 +117,9 @@ $('#confirm').addEventListener('click', e => {
 	postInfo.origin_article = inputText.value;
 	postInfo.time = new Date().getTime();
 	postInfo.last_time = new Date().getTime();
-	console.log(postInfo)
 	postArticle(postInfo)
-}, false)
+}, false);
+// 发布文章
 async function postArticle(postInfo) {
 	let data = await ajax({
 		url: '/article/post_article', type: 'POST', data: postInfo
@@ -123,5 +128,20 @@ async function postArticle(postInfo) {
 	return data;
 }
 // postArticle()
+if (id) {
+	getArticleInfo(id);
+}
+
+async function getArticleInfo(id) {
+	let data = await ajax({url: '/article/get_article_detail', method: 'get', data: {id: id}});
+	console.log(data)
+	console.log(data.data.title)
+	inputText.value = data.data.origin_article;
+	onTextChange();
+	$('#title-value').value = data.data.title;
+	$('#auth-value').value = data.data.auth;
+	$('#tag-value').value = data.data.tag;
+	tagList[Number(data.data.type) - 1].click();
+}
 
 
