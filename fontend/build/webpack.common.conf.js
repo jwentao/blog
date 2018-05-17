@@ -90,7 +90,8 @@ const generateConfig = env => {
 			edit: './src/edit.js',
 			error: './src/error.js',
 			search: './src/search.js',
-			login: './src/login.js'
+			login: './src/login.js',
+			manage: './src/manage.js'
 		},
 
 		output: {
@@ -204,6 +205,14 @@ const generateConfig = env => {
 					collapseWhitespace: true
 				},
 				chunks: ['login']
+			}),
+			new HtmlWebpackPlugin({
+				filename: 'manage.html',
+				template: './manage.html',
+				minify: {
+					collapseWhitespace: true
+				},
+				chunks: ['manage']
 			})
 		]
 	}

@@ -1,0 +1,46 @@
+@import './common/base';
+
+.header {
+  height: 5rem;
+  background-color: white;
+  .logout, .new {
+    float: right;
+    padding: 0 2rem;
+    line-height: 5rem;
+    text-align: center;
+    width: 5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}
+.main {
+  max-width: 960px;
+  position: relative;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: white;
+  .entry-list {
+    padding: 0 2rem;
+    list-style-type: none;
+    .item {
+      display: flex;
+      height: 5rem;
+      line-height: 5rem;
+      font-size: 1.5rem;
+      border-bottom: 1px solid $lightGray;
+      .title {
+        flex: 1;
+      }
+      .modify, .delete {
+        flex: 0 0 5rem;
+        width: 5rem;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+  }
+  .sentinels {
+    height: 2rem;
+  }
+}
