@@ -150,7 +150,7 @@ export let ajax = function (options) {
 		if (localStorage.getItem('accesstoken')) {
 			options.data.token = localStorage.getItem('accesstoken')
 		} else {
-			console.log('no token, please login');
+			location.href = './login.html';
 			return;
 		}
 	}
