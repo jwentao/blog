@@ -48,6 +48,26 @@ router.post('/login', urlencodedParser, (request, response, next) => {
     }
 });
 
+router.get('/auth', async (request, response, next) => {
+	console.log('in auth')
+	let token = request.query.token;
+	if (token) {
+		console.log(token)
+		let decode = await main.verify(token);
+		if (decode) {
+			response.json({
+				code: 0,
+				msg: 'valid token'
+			});
+    } else {
+			response.json({
+				code: 5555,
+				msg: 'invalid token'
+			})
+    }
+	}
+});
+
 router.get('/test', (request, response, next) => {
     console.log('in test')
     let token = request.query.token;
