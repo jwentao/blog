@@ -14,7 +14,7 @@ let verify = function (token) {
 					let now = new Date().getTime();
 					console.log('now')
 					// 超出时间，返回false
-					if (now > decoded.expires) {
+					if (now > decoded.expires || !decoded.canUse) {
 						console.log('超时');
 						return resolve(false);
 					}
