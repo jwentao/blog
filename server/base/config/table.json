@@ -15,12 +15,8 @@
     "single_settle": "Number",
     "create_time": "Number"
   },
-  "online_data": {
-    "server_id": "String",
-    "pf": "Number",
-    "player_num": "Number",
-    "room_list": "String",
-    "update_time": "Number"
+  "token_info": {
+    "can_use": "Boolean"
   },
   "article_info": {
     "title": "String",

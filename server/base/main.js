@@ -8,24 +8,38 @@ let verify = function (token) {
 				console.log(err)
 				// 解密失败，返回false
 				if (err) {
+					console.log('解密失败')
 					return resolve(false);
 				} else {
 					console.log('success', decoded)
 					let now = new Date().getTime();
-					console.log('now')
 					// 超出时间，返回false
-					if (now > decoded.expires || !decoded.canUse) {
+					if (now > decoded.expires) {
 						console.log('超时');
 						return resolve(false);
 					}
-					mongo.findOne('user_info', {id: decoded.id, psw: decoded.psw}, (err, res) => {
-						if (res) {
-							// 查询到
-							console.log('账号密码正确');
-							return resolve(true);
+					mongo.findOne('token_info', {_id: decoded.token_id}, (tokenErr, tokenEes) => {
+						if (tokenEes) {
+							// 查询到,验证是否可用
+							if (tokenEes.can_use) {
+								// 可用，验证账号密码
+								mongo.findOne('user_info', {id: decoded.id, psw: decoded.psw}, (err, res) => {
+									if (res) {
+										// 查询到
+										console.log('账号密码正确');
+										return resolve(decoded);
+									} else {
+										// 未查询到
+										console.log('账号密码错误')
+										return resolve(false);
+									}
+								});
+							} else {
+								return resolve(false);
+							}
 						} else {
 							// 未查询到
-							console.log('账号密码错误')
+							console.log('未查询到')
 							return resolve(false);
 						}
 					});

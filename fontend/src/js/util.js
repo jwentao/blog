@@ -146,6 +146,14 @@ export let $ = el => {
  options包括url,type(默认为get),data,后面两个可以为空
  */
 export let ajax = function (options) {
+	if (options.data.token) {
+		if (localStorage.getItem('accesstoken')) {
+			options.data.token = localStorage.getItem('accesstoken')
+		} else {
+			console.log('no token, please login');
+			return;
+		}
+	}
 	return new Promise((resolve, reject) => {
 		let opt = {
 			url: '',
@@ -226,7 +234,7 @@ export let importSvg = () => {
 	if (document.querySelector('head')) document.querySelector('head').appendChild(script);
 	else document.documentElement.appendChild(script);
 };
-
+// 转换时间
 function transTime(time) {
 	if (typeof time !== "number") {
 		time = Number(time);

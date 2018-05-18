@@ -117,6 +117,7 @@ $('#confirm').addEventListener('click', e => {
 	postInfo.tag = $('#tag-value').value;
 	postInfo.origin_article = inputText.value;
 	postInfo.last_time = new Date().getTime();
+	postInfo.token = true;
 	if (id) {
 		console.log('has id')
 		postInfo._id = id;

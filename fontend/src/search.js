@@ -8,7 +8,7 @@ let global = {
 	canLoad: false
 };
 
-$('body')[0].innerHTML = generateMainHtml({activeIdx: 0});
+$('body')[0].innerHTML = generateMainHtml({activeIdx: -1});
 global.titleKeyWord = $('#search-input').value = getQueryValue('title');
 searchByTitle();
 
