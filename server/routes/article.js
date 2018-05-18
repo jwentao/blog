@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const mongo = require('../base/mongo');
 const bodyParser = require('body-parser');
+const main = require("../base/main");
 // tips:后续再根据contenttype的类型做处理
 // create application/json parser
 // const jsonParser = bodyParser.json()
@@ -76,7 +77,28 @@ router.get('/get_article_detail', (request, response) => {
  * @param title 文章标题
  *
  */
-router.post('/post_article', urlencodedParser, function(request, response, next) {
+router.post('/post_article', urlencodedParser, async function(request, response, next) {
+	// token取出来用于验证，之后就可以删掉
+	let token = request.body.token;
+	delete request.body.token;
+	if (token) {
+		console.log(token)
+		let decode = await main.verify(token);
+		console.log('decode', decode)
+		if (!decode) {
+			response.json({
+				code: 6666,
+				msg: 'invalid token'
+			});
+			return;
+		}
+	} else {
+		response.json({
+			code: 5555,
+			msg: 'no token'
+		});
+		return;
+	}
 	mongo.findOne('article_info', {title: request.body.title}, function (err, res) {
 		// 查询数据库中是否已经存在此标题
 		if (res) {
@@ -106,7 +128,28 @@ router.post('/post_article', urlencodedParser, function(request, response, next)
  * @param title 文章标题
  *
  */
-router.post('/update_article', urlencodedParser, function(request, response, next) {
+router.post('/update_article', urlencodedParser, async function(request, response, next) {
+	// token取出来用于验证，之后就可以删掉
+	let token = request.body.token;
+	delete request.body.token;
+	if (token) {
+		console.log(token);
+		let decode = await main.verify(token);
+		console.log('decode', decode)
+		if (!decode) {
+			response.json({
+				code: 6666,
+				msg: 'invalid token'
+			});
+			return;
+		}
+	} else {
+		response.json({
+			code: 5555,
+			msg: 'no token'
+		});
+		return;
+	}
 	mongo.findOne('article_info', {_id: request.body._id}, function (err, res) {
 		// 查询数据库中是否已经存
 		if (res) {
@@ -136,7 +179,28 @@ router.post('/update_article', urlencodedParser, function(request, response, nex
  * @param
  *
  */
-router.get('/delete_article', (request, response, next) => {
+router.get('/delete_article', async (request, response, next) => {
+	// token取出来用于验证，之后就可以删掉
+	let token = request.query.token;
+	delete request.query.token;
+	if (token) {
+		console.log(token);
+		let decode = await main.verify(token);
+		console.log('decode', decode)
+		if (!decode) {
+			response.json({
+				code: 6666,
+				msg: 'invalid token'
+			});
+			return;
+		}
+	} else {
+		response.json({
+			code: 5555,
+			msg: 'no token'
+		});
+		return;
+	}
     mongo.findOne('article_info', {_id: request.query._id}, function (err, res) {
         // 查询数据库中是否已经存
         if (res) {
