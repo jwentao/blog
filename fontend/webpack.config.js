@@ -17,6 +17,10 @@ module.exports = {
 		app: './src/app.js',
 		detail: './src/detail.js',
 		edit: './src/edit.js',
+		error: './src/error.js',
+		search: './src/search.js',
+		login: './src/login.js',
+		manage: './src/manage.js',
 		'vendor': './src/js/util.js'
 	},
 	output: {
@@ -127,7 +131,7 @@ module.exports = {
 							name: '[name]-[hash:5].[ext]',
 							limit: 5000,
 							publicPath: '',
-							outputPath: 'dist/',
+							outputPath: 'dist/css/icon',
 							useRelativePath: true
 						}
 					}
@@ -212,6 +216,38 @@ module.exports = {
 				collapseWhitespace: true
 			},
 			chunks: ['edit', 'vendor']
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'error.html',
+			template: './error.html',
+			minify: {
+				collapseWhitespace: true
+			},
+			chunks: ['error', 'vendor']
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'search.html',
+			template: './search.html',
+			minify: {
+				collapseWhitespace: true
+			},
+			chunks: ['search', 'vendor']
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'login.html',
+			template: './login.html',
+			minify: {
+				collapseWhitespace: true
+			},
+			chunks: ['login', 'vendor']
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'manage.html',
+			template: './manage.html',
+			minify: {
+				collapseWhitespace: true
+			},
+			chunks: ['manage', 'vendor']
 		}),
 		new webpack.optimize.UglifyJsPlugin(),
 		new CleanWebpackPlugin(path.resolve(__dirname, './dist'))
