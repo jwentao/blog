@@ -43,6 +43,9 @@ let io = new IntersectionObserver(e => {
 io.observe($('#sentinels'));
 
 async function searchByTitle () {
+	if (global.titleKeyWord === '') {
+		return
+	}
 	let data = await ajax({url: '/article/search_by_title', type: 'GET', data: {
 		idx: global.idx,
 		num: global.num,
