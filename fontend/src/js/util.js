@@ -21,8 +21,8 @@ export let generateMainHtml = options => {
 	let liList = '';
 	for (let [index, item] of nav.entries()) {
 		liList += '<li class="nav-item"><a href="" ';
-		liList += options.activeIdx === index ? 'class="active"' : ''
-		liList += `>${item}</a></li>`
+		liList += options.activeIdx === index ? 'class="active"' : '';
+		liList += ` data-index=${index}>${item}</a></li>`
 	}
 	let needBanner = options.needBanner === undefined ? true : options.needBanner;
 	let head = `<header class="header">
@@ -34,7 +34,7 @@ export let generateMainHtml = options => {
                     <div class="phone-show-menu">
                         <span class="iconfont icon-sanjiao">首页</span>
                     </div>
-                    <ul class="pc-show">
+                    <ul class="pc-show" id="pc-show">
                         ${liList}
                     </ul>
                 </li>
@@ -218,6 +218,7 @@ export let markdown2html = markdownStr => {
 	})
 	return text
 };
+// 解析参数
 export let getQueryValue = (key) => {
 	let match=location.search.match(new RegExp(key+'=([^&]*)'));
 	return match&&match[1]||'';

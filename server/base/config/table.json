@@ -16,6 +16,7 @@
     "create_time": "Number"
   },
   "token_info": {
+    "id": "String",
     "can_use": "Boolean"
   },
   "article_info": {

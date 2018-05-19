@@ -1,8 +1,32 @@
 import './css/index.scss'
 // import 'babel-polyfill'
-import { $, ajax, generateMainHtml, generateEntryList } from './js/util';
-$('body')[0].innerHTML = generateMainHtml({activeIdx: 0});
-
+import { $, ajax, generateMainHtml, generateEntryList, getQueryValue } from './js/util';
+let indexMap = ['default', 'all', 'origin', 'reprint'];
+init();
+function init() {
+    let type = getQueryValue('type');
+    let idx = 0;
+    if (type) {
+    	idx = indexMap.indexOf(type);
+	}
+    $('body')[0].innerHTML = generateMainHtml({activeIdx: idx});
+}
+$('#pc-show').addEventListener('click', e => {
+	e.stopPropagation();
+	e.preventDefault();
+	let index = e.target.dataset.index;
+	if (index) {
+		if (e.target.classList.contains('active')) {
+			return;
+		}
+		// Array.from($('.nav-item')).forEach(item => {
+		// 	console.log(item)
+		// 	item.firstElementChild.classList.remove('active');
+		// });
+		// e.target.classList.add('active');
+		location.href = `./index.html?type=${indexMap[index]}`
+	}
+}, false);
 $('#search-btn').addEventListener('click', e => {
 	let input = $('#search-input').value;
 	console.log(input)

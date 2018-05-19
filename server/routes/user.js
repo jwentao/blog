@@ -20,29 +20,33 @@ router.post('/login', urlencodedParser, (request, response, next) => {
 		mongo.findOne('user_info', {id: request.body.id, psw: request.body.psw}, (err, res) => {
 			// 账号密码正确
 			if (res) {
-				mongo.save('token_info', {can_use: true}, function (saveErr, saveRes) {
-					if (saveErr) {
-						saveErr.code = 201;
-						response.json(saveErr);
-					} else {
-						console.log('id', saveRes._id)
-						// 生成一个token
-						let now = new Date().getTime();
-						let str = JSON.stringify({
-							id: request.body.id,
-							psw: request.body.psw,
-							expires: now + 7200000,
-							refresh: now + 1800000,
-							token_id: saveRes._id
-						});
-						let token = jwt.sign(str, secretOrPrivateKey);
-						response.json({
-							code: 0,
-							msg: 'success',
-							token: token
-						});
-					}
-				});
+				// 将历史token全部标记为不可用
+                mongo.update('token_info',{id: request.body.id}, {can_use: false}, function (saveErr, saveRes) {
+                	// 保存此次tokeninfo
+                    mongo.save('token_info', {id: request.body.id, can_use: true}, function (saveErr, saveRes) {
+                        if (saveErr) {
+                            saveErr.code = 201;
+                            response.json(saveErr);
+                        } else {
+                            console.log('id', saveRes._id)
+                            // 生成一个token
+                            let now = new Date().getTime();
+                            let str = JSON.stringify({
+                                id: request.body.id,
+                                psw: request.body.psw,
+                                expires: now + 7200000,
+                                refresh: now + 1800000,
+                                token_id: saveRes._id
+                            });
+                            let token = jwt.sign(str, secretOrPrivateKey);
+                            response.json({
+                                code: 0,
+                                msg: 'success',
+                                token: token
+                            });
+                        }
+                    });
+                });
 			} else {
 				response.json({
 					code: 0,
