@@ -2,6 +2,12 @@ import './css/index.scss'
 // import 'babel-polyfill'
 import { $, ajax, generateMainHtml, generateEntryList, getQueryValue } from './js/util';
 let indexMap = ['default', 'all', 'origin', 'reprint'];
+let global = {
+	idx: 0,
+	num: 10,
+	canLoad: false
+};
+let entryList;
 init();
 function init() {
     let type = getQueryValue('type');
@@ -10,6 +16,29 @@ function init() {
     	idx = indexMap.indexOf(type);
 	}
     $('body')[0].innerHTML = generateMainHtml({activeIdx: idx});
+    entryList = $('#entry-list');
+    getArticleList(type);
+    // 监听点击，跳转文章
+    entryList.addEventListener('click', e => {
+        e.stopPropagation();
+        let node = findParentDataSet(e.target, 'id');
+        let id;
+        if (node) {
+            id = node.dataset.id;
+            location.href = `./detail.html?id=${id}`;
+        }
+        console.log(id)
+    }, false);
+	// 无限滚动
+    let io = new IntersectionObserver(e => {
+        if (e[0].intersectionRatio <= 0	) return;
+        console.log('need load', global.canLoad)
+        if (global.canLoad) {
+            global.idx ++;
+            getArticleList(type);
+        }
+    });
+    io.observe($('#sentinels'));
 }
 $('#pc-show').addEventListener('click', e => {
 	e.stopPropagation();
@@ -37,30 +66,26 @@ $('.phone-show-menu')[0].addEventListener('click', e => {
 	console.log(e)
 	let showEl = $('.pc-show')[0]
 	showEl.classList.toggle('show')
-}, false)
-
-getArticleList()
+}, false);
 
 
-async function getArticleList () {
-	let data = await ajax({url: '/article/get_article_list', type: 'GET', data: {
-		idx: 0,
-		num: 10
-	}});
+
+async function getArticleList (type) {
+	let options = {
+		idx: global.idx,
+		num: global.num
+	};
+	if (type === 'origin' || type === 'reprint') {
+		options.type = type === 'origin' ? 1 : 2;
+	}
+	let data = await ajax({url: '/article/get_article_list', type: 'GET', data: options});
 	console.log(data)
 	if (data.code === 0) {
-		let entryList = $('#entry-list');
 		entryList.insertAdjacentHTML('beforeEnd', generateEntryList(data));
-		entryList.addEventListener('click', e => {
-			e.stopPropagation();
-			let node = findParentDataSet(e.target, 'id');
-			let id;
-			if (node) {
-				id = node.dataset.id;
-				location.href = `./detail.html?id=${id}`;
-			}
-			console.log(id)
-		}, false);
+		console.log('type', type)
+		if (type && type !== 'default' && ((global.idx + 1) * global.num < data.total || !data.total)) {
+			global.canLoad = true;
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 let baseUrl = 'http://localhost';
-let nav = ['首页', '分页1', '分页2', '分页3'];
+let nav = ['首页', '全部', '原创', '转载'];
 let extend = (dst, obj) => {
 	for (let i in obj) {
 		if (obj.hasOwnProperty(i)) {
