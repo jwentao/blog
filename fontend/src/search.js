@@ -7,11 +7,11 @@ let global = {
 	titleKeyWord: '',
 	canLoad: false
 };
-
+let indexMap = ['default', 'all', 'origin', 'reprint'];
 init();
 function init() {
 	$('body')[0].innerHTML = generateMainHtml({activeIdx: -1});
-	global.titleKeyWord = $('#search-input').value = getQueryValue('title');
+	global.titleKeyWord = $('#search-input').value = decodeURI(getQueryValue('title'));
 	searchByTitle();
 	bindEvent();
 	let io = new IntersectionObserver(e => {
@@ -47,6 +47,23 @@ function bindEvent() {
 		global.idx = 0;
 		$('#entry-list').innerHTML = '';
 		searchByTitle();
+	}, false);
+
+	$('#pc-show').addEventListener('click', e => {
+		e.stopPropagation();
+		e.preventDefault();
+		let index = e.target.dataset.index;
+		if (index) {
+			if (e.target.classList.contains('active')) {
+				return;
+			}
+			// Array.from($('.nav-item')).forEach(item => {
+			// 	console.log(item)
+			// 	item.firstElementChild.classList.remove('active');
+			// });
+			// e.target.classList.add('active');
+			location.href = `./index.html?type=${indexMap[index]}`
+		}
 	}, false);
 }
 // 搜索
