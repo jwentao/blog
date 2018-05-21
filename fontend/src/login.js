@@ -12,7 +12,7 @@ $('#confirm').addEventListener('click', e => {
 		login(id, psw);
 	}
 }, false);
-
+// 登录
 async function login(id, psw) {
 	let data = await ajax({url: '/user/login' , type: 'POST', data: {
 		id: id,

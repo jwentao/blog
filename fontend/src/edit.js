@@ -16,117 +16,122 @@ let postInfo = {
 	time: 0,
 	origin_article: '' // 原文(markdowm语法)
 };
-
+let tagList;
 let inputText = $('#text-input')
 let contentText = $('#content')
 let text = '';
 let id = getQueryValue('id');
+init()
+
+
 inputText.addEventListener('keyup', e => {
 	onTextChange()
 }, false);
 inputText.addEventListener('blur', e => {
 	onTextChange()
 }, false);
-
-function onTextChange() {
-	text = converter.makeHtml(inputText.value)
-	// showdown解析四个空格开头的代码块，会出现hljs字符，这里先暴力替换掉
-	text = text.replace(/>hljs/g, '>')
-	// 序列化h1的id
-	let idx = 0
-	text = text.replace(/(<h[1-6][\S|\s]+?id=["|'])([\w|\-]*)(['|"])/g, function (a, b, c, d) {
-		return b + 'heading-' + idx++ + d
-	})
-	contentText.innerHTML = text;
+function init() {
+	if (id) {
+		getArticleInfo(id);
+	}
+	extendTextArea();
+	bindEvent();
+}
+// 扩展文本框元素功能
+function extendTextArea() {
+	HTMLTextAreaElement.prototype.getCaretPosition = function () {
+//return the caret position of the textarea
+		return this.selectionStart;
+	};
+	HTMLTextAreaElement.prototype.setCaretPosition = function (position) {
+//change the caret position of the textarea
+		this.selectionStart = position;
+		this.selectionEnd = position;
+		this.focus();
+	};
+	HTMLTextAreaElement.prototype.hasSelection = function () {
+//if the textarea has selection then return true
+		if (this.selectionStart == this.selectionEnd) {
+			return false;
+		} else {
+			return true;
+		}
+	};
+	HTMLTextAreaElement.prototype.getSelectedText = function () {
+//return the selection text
+		return this.value.substring(this.selectionStart, this.selectionEnd);
+	};
+	HTMLTextAreaElement.prototype.setSelection = function (start, end) {
+//change the selection area of the textarea
+		this.selectionStart = start;
+		this.selectionEnd = end;
+		this.focus();
+	};
 }
 
-HTMLTextAreaElement.prototype.getCaretPosition = function () {
-//return the caret position of the textarea
-	return this.selectionStart;
-};
-HTMLTextAreaElement.prototype.setCaretPosition = function (position) {
-//change the caret position of the textarea
-	this.selectionStart = position;
-	this.selectionEnd = position;
-	this.focus();
-};
-HTMLTextAreaElement.prototype.hasSelection = function () {
-//if the textarea has selection then return true
-	if (this.selectionStart == this.selectionEnd) {
+function bindEvent() {
+	inputText.addEventListener('keydown', e => {
+		if (event.key !== 'Tab') return
+		// if (event && event.preventDefault) {
+		// 	console.log('a')
+		// 	e.preventDefault()
+		// } else {
+		// 	window.event.returnValue = false
+		// }
+		// tab占两个空格
+		let tab = '  '
+		let newCaretPosition;
+		newCaretPosition = inputText.getCaretPosition() + tab.length;
+		inputText.value = inputText.value.substring(0, inputText.getCaretPosition()) + tab + inputText.value.substring(inputText.getCaretPosition(), inputText.value.length);
+		inputText.setCaretPosition(newCaretPosition);
+		e.preventDefault()
 		return false;
-	} else {
-		return true;
-	}
-};
-HTMLTextAreaElement.prototype.getSelectedText = function () {
-//return the selection text
-	return this.value.substring(this.selectionStart, this.selectionEnd);
-};
-HTMLTextAreaElement.prototype.setSelection = function (start, end) {
-//change the selection area of the textarea
-	this.selectionStart = start;
-	this.selectionEnd = end;
-	this.focus();
-};
-inputText.addEventListener('keydown', e => {
-	if (event.key !== 'Tab') return
-	// if (event && event.preventDefault) {
-	// 	console.log('a')
-	// 	e.preventDefault()
-	// } else {
-	// 	window.event.returnValue = false
-	// }
-	// tab占两个空格
-	let tab = '  '
-	let newCaretPosition;
-	newCaretPosition = inputText.getCaretPosition() + tab.length;
-	inputText.value = inputText.value.substring(0, inputText.getCaretPosition()) + tab + inputText.value.substring(inputText.getCaretPosition(), inputText.value.length);
-	inputText.setCaretPosition(newCaretPosition);
-	e.preventDefault()
-	return false;
-}, false)
+	}, false);
 // 显示/隐藏 发布box
-$('#toggle-submit-box').addEventListener('click', e => {
-	let el = $('#toggle-submit-box');
-	let panel = $('#panel');
-	if (el.classList.contains('icon-xialasanjiao')) {
-		el.classList.remove('icon-xialasanjiao');
-		el.classList.add('icon-xialasanjiao-copy');
-		panel.style.display = 'block';
-	} else {
-		el.classList.remove('icon-xialasanjiao-copy');
-		el.classList.add('icon-xialasanjiao');
-		panel.style.display = 'none';
-	}
-}, false)
-// 切换发布box里的标签
-let tagList = Array.from($('.class-item'));
-tagList.forEach(item => {
-	item.addEventListener('click', e => {
-		postInfo.type = e.target.dataset.type
-		tagList.forEach(i => {
-			i.classList.remove('active')
-		})
-		item.classList.add('active')
-	}, false)
-})
-// 点击确认发布
-$('#confirm').addEventListener('click', e => {
-	postInfo.title = $('#title-value').value;
-	postInfo.auth = $('#auth-value').value;
-	postInfo.tag = $('#tag-value').value;
-	postInfo.origin_article = inputText.value;
-	postInfo.last_time = new Date().getTime();
-	postInfo.token = true;
-	if (id) {
-		console.log('has id')
-		postInfo._id = id;
-        updateArticle(postInfo)
-	} else {
-        postInfo.time = postInfo.last_time;
-        postArticle(postInfo)
-	}
-}, false);
+	$('#toggle-submit-box').addEventListener('click', e => {
+		let el = $('#toggle-submit-box');
+		let panel = $('#panel');
+		if (el.classList.contains('icon-xialasanjiao')) {
+			el.classList.remove('icon-xialasanjiao');
+			el.classList.add('icon-xialasanjiao-copy');
+			panel.style.display = 'block';
+		} else {
+			el.classList.remove('icon-xialasanjiao-copy');
+			el.classList.add('icon-xialasanjiao');
+			panel.style.display = 'none';
+		}
+	}, false);
+	// 点击确认发布
+	$('#confirm').addEventListener('click', e => {
+		postInfo.title = $('#title-value').value;
+		postInfo.auth = $('#auth-value').value;
+		postInfo.tag = $('#tag-value').value;
+		postInfo.origin_article = inputText.value;
+		postInfo.last_time = new Date().getTime();
+		postInfo.token = true;
+		if (id) {
+			console.log('has id')
+			postInfo._id = id;
+			updateArticle(postInfo)
+		} else {
+			postInfo.time = postInfo.last_time;
+			postArticle(postInfo)
+		}
+	}, false);
+	// 切换发布box里的标签
+	tagList = Array.from($('.class-item'));
+	tagList.forEach(item => {
+		item.addEventListener('click', e => {
+			postInfo.type = e.target.dataset.type
+			tagList.forEach(i => {
+				i.classList.remove('active')
+			})
+			item.classList.add('active')
+		}, false)
+	});
+}
+
+
 // 发布文章
 async function postArticle(postInfo) {
 	let data = await ajax({
@@ -143,10 +148,7 @@ async function updateArticle(postInfo) {
     return data;
 }
 // postArticle()
-if (id) {
-	getArticleInfo(id);
-}
-
+// 获取文章内容(修改文章时)
 async function getArticleInfo(id) {
 	let data = await ajax({url: '/article/get_article_detail', method: 'get', data: {id: id}});
 	console.log(data)
@@ -158,6 +160,18 @@ async function getArticleInfo(id) {
 	$('#tag-value').value = data.data.tag;
     postInfo.time = data.data.time;
 	tagList[Number(data.data.type) - 1].click();
+}
+// 文本框内容变化触发
+function onTextChange() {
+	text = converter.makeHtml(inputText.value)
+	// showdown解析四个空格开头的代码块，会出现hljs字符，这里先暴力替换掉
+	text = text.replace(/>hljs/g, '>')
+	// 序列化h1的id
+	let idx = 0
+	text = text.replace(/(<h[1-6][\S|\s]+?id=["|'])([\w|\-]*)(['|"])/g, function (a, b, c, d) {
+		return b + 'heading-' + idx++ + d
+	})
+	contentText.innerHTML = text;
 }
 
 

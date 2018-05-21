@@ -9,6 +9,8 @@ let global = {
 };
 let entryList;
 init();
+
+// 初始化
 function init() {
     let type = getQueryValue('type');
     let idx = 0;
@@ -39,34 +41,38 @@ function init() {
         }
     });
     io.observe($('#sentinels'));
+	bindEvent();
 }
-$('#pc-show').addEventListener('click', e => {
-	e.stopPropagation();
-	e.preventDefault();
-	let index = e.target.dataset.index;
-	if (index) {
-		if (e.target.classList.contains('active')) {
-			return;
+// 绑定事件
+function bindEvent() {
+	$('#pc-show').addEventListener('click', e => {
+		e.stopPropagation();
+		e.preventDefault();
+		let index = e.target.dataset.index;
+		if (index) {
+			if (e.target.classList.contains('active')) {
+				return;
+			}
+			// Array.from($('.nav-item')).forEach(item => {
+			// 	console.log(item)
+			// 	item.firstElementChild.classList.remove('active');
+			// });
+			// e.target.classList.add('active');
+			location.href = `./index.html?type=${indexMap[index]}`
 		}
-		// Array.from($('.nav-item')).forEach(item => {
-		// 	console.log(item)
-		// 	item.firstElementChild.classList.remove('active');
-		// });
-		// e.target.classList.add('active');
-		location.href = `./index.html?type=${indexMap[index]}`
-	}
-}, false);
-$('#search-btn').addEventListener('click', e => {
-	let input = $('#search-input').value;
-	console.log(input)
-	location.href = './search.html?title=' + input;
-}, false);
+	}, false);
+	$('#search-btn').addEventListener('click', e => {
+		let input = $('#search-input').value;
+		console.log(input)
+		location.href = './search.html?title=' + input;
+	}, false);
 
-$('.phone-show-menu')[0].addEventListener('click', e => {
-	console.log(e)
-	let showEl = $('.pc-show')[0]
-	showEl.classList.toggle('show')
-}, false);
+	$('.phone-show-menu')[0].addEventListener('click', e => {
+		console.log(e)
+		let showEl = $('.pc-show')[0]
+		showEl.classList.toggle('show')
+	}, false);
+}
 
 
 
@@ -75,8 +81,9 @@ async function getArticleList (type) {
 		idx: global.idx,
 		num: global.num
 	};
+	console.log(type === 'origin' ? 1 : 2)
 	if (type === 'origin' || type === 'reprint') {
-		options.type = type === 'origin' ? 1 : 2;
+		options.type = (type === 'origin' ? 1 : 2);
 	}
 	let data = await ajax({url: '/article/get_article_list', type: 'GET', data: options});
 	console.log(data)

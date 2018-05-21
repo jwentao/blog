@@ -12,15 +12,16 @@ let method = {
 		let data = await ajax({url: '/article/get_article_detail', method: 'get', data: {id: id}});
 		console.log(data)
 		if (data.code !== 0) {
-            $('#main').insertAdjacentHTML('afterEnd', generateErrorHtml());
-            importSvg();
+			$('#main').insertAdjacentHTML('afterEnd', generateErrorHtml());
+			importSvg();
 		} else {
-            let html = markdown2html(data.data.origin_article);
-            $('#content').innerHTML = `<div class="article-box"><h1 class="article-title">${data.data.title}</h1>
+			document.title = data.data.title;
+			let html = markdown2html(data.data.origin_article);
+			$('#content').innerHTML = `<div class="article-box"><h1 class="article-title">${data.data.title}</h1>
 													 <div id="article-body" class="markdown-body">${html}</div></div>`;
-            let headerList = Array.from($('#article-body').querySelectorAll("h1,h2,h3,h4,h5,h6"));
-            this.generateHeadList(headerList)
-            this.bindEvent(headerList)
+			let headerList = Array.from($('#article-body').querySelectorAll("h1,h2,h3,h4,h5,h6"));
+			this.generateHeadList(headerList)
+			this.bindEvent(headerList)
 		}
 	},
 	/**
@@ -52,31 +53,34 @@ let method = {
 			temp += '</ul>'
 			return temp
 		}
-		function tree(headerList, e){
+
+		function tree(headerList, e) {
 			// 第一次传入时没有e参数，以header数组第一个元素高一级的header为基础，如h1-》h0， h2-》h1
-			if(!e) return listChildren(headerList, {tagName: 'H' + (getLevel(headerList[0]) - 1)})
+			if (!e) return listChildren(headerList, {tagName: 'H' + (getLevel(headerList[0]) - 1)})
 			let resultTree = {'headTitle': e.innerText, 'headId': e.id};
 			// 限制只取到最高级往下3级
-			if(getLevel(e) < 3){
-				let children = listChildren(headerList ,e);
-				if(children.length !== 0)
+			if (getLevel(e) < 3) {
+				let children = listChildren(headerList, e);
+				if (children.length !== 0)
 					resultTree.children = children;
 			}
 
 			return resultTree;
 		}
-		function getLevel(e){
+
+		function getLevel(e) {
 			return e.tagName.substring(1, 2)
 			// return e.tagName.match(/\d/);
 		}
-		function listChildren(headerList, e){
+
+		function listChildren(headerList, e) {
 			let resultList = [];
 			let index = headerList.indexOf(e);
 			// console.log('index', index)
-			while(headerList[index+1] && getLevel(headerList[index+1]) > getLevel(e)){
-				if((getLevel(headerList[index+1]) - 1).toString() === getLevel(e))
-					resultList.push(tree(headerList, headerList[index+1]))
-				index ++;
+			while (headerList[index + 1] && getLevel(headerList[index + 1]) > getLevel(e)) {
+				if ((getLevel(headerList[index + 1]) - 1).toString() === getLevel(e))
+					resultList.push(tree(headerList, headerList[index + 1]))
+				index++;
 			}
 			return resultList;
 		}

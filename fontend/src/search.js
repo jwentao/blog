@@ -8,40 +8,48 @@ let global = {
 	canLoad: false
 };
 
-$('body')[0].innerHTML = generateMainHtml({activeIdx: -1});
-global.titleKeyWord = $('#search-input').value = getQueryValue('title');
-searchByTitle();
+init();
+function init() {
+	$('body')[0].innerHTML = generateMainHtml({activeIdx: -1});
+	global.titleKeyWord = $('#search-input').value = getQueryValue('title');
+	searchByTitle();
+	bindEvent();
+	let io = new IntersectionObserver(e => {
+		if (e[0].intersectionRatio <= 0	) return;
+		console.log('need load', global.canLoad)
+		if (global.canLoad) {
+			global.idx ++;
+			searchByTitle();
+		}
+	});
+	io.observe($('#sentinels'));
+}
 
-$('#entry-list').addEventListener('click', e => {
-	e.stopPropagation();
-	console.log('click')
-	let node = findParentDataSet(e.target, 'id');
-	let id;
-	if (node) {
-		id = node.dataset.id;
-		location.href = `./detail.html?id=${id}`;
-	}
-}, false);
 
-$('#search-btn').addEventListener('click', e => {
-    let input = $('#search-input');
-	history.replaceState({}, input.value, './search.html?title=' + input.value);
-    global.titleKeyWord = input.value;
-    global.idx = 0;
-	$('#entry-list').innerHTML = '';
-    searchByTitle();
-}, false);
 
-let io = new IntersectionObserver(e => {
-	if (e[0].intersectionRatio <= 0	) return;
-	console.log('need load', global.canLoad)
-	if (global.canLoad) {
-		global.idx ++;
+// 绑定事件
+function bindEvent() {
+	$('#entry-list').addEventListener('click', e => {
+		e.stopPropagation();
+		console.log('click')
+		let node = findParentDataSet(e.target, 'id');
+		let id;
+		if (node) {
+			id = node.dataset.id;
+			location.href = `./detail.html?id=${id}`;
+		}
+	}, false);
+
+	$('#search-btn').addEventListener('click', e => {
+		let input = $('#search-input');
+		history.replaceState({}, input.value, './search.html?title=' + input.value);
+		global.titleKeyWord = input.value;
+		global.idx = 0;
+		$('#entry-list').innerHTML = '';
 		searchByTitle();
-	}
-});
-io.observe($('#sentinels'));
-
+	}, false);
+}
+// 搜索
 async function searchByTitle () {
 	if (global.titleKeyWord === '') {
 		return

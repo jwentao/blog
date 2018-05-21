@@ -24,7 +24,7 @@ async function init() {
 		let classList = e.target.classList;
 		if (classList.contains('delete')) { // 点击删除
 			let result = confirm('是否删除！');
-			if(result){
+			if (result) {
 				let parentNode = e.target.parentNode;
 				deleteArticle(parentNode);
 			}
@@ -41,6 +41,7 @@ async function init() {
 		location.href = './edit.html';
 	}, false)
 }
+// 注销
 async function logout() {
 	let data = await ajax({
 		url: '/user/logout', type: 'GET', data: {
