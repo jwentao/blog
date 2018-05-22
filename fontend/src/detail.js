@@ -1,7 +1,7 @@
 import './css/detail.scss';
 import './css/error.scss';
 import {$, generateMainHtml, ajax, markdown2html, generateErrorHtml, importSvg} from './js/util';
-
+let indexMap = ['default', 'all', 'origin', 'reprint'];
 let method = {
 	/**
 	 * 根据id请求文章
@@ -86,32 +86,32 @@ let method = {
 		}
 	},
 	bindEvent (headerList) {
-		let catalogBody = $('#catalog-body')
+		let catalogBody = $('#catalog-body');
 		catalogBody.addEventListener('click', e => {
-			e.preventDefault()
+			e.preventDefault();
 			let id = e.target.dataset.target
-			let activeLi = catalogBody.querySelector('.active')
-			if (activeLi) activeLi.classList.remove('active')
-			e.target.classList.add('active')
-			$('#' + id).scrollIntoView()
+			let activeLi = catalogBody.querySelector('.active');
+			if (activeLi) activeLi.classList.remove('active');
+			e.target.classList.add('active');
+			$('#' + id).scrollIntoView();
 			window.scrollBy(0, -60)
-		}, false)
+		}, false);
 // 监听导航
 		let io = new IntersectionObserver(e => {
-			console.log(e)
-			e = e[0]
-			console.log(e.target.id, e.intersectionRect.top, e.boundingClientRect)
+			console.log(e);
+			e = e[0];
+			console.log(e.target.id, e.intersectionRect.top, e.boundingClientRect);
 			if (e.isIntersecting) {
-				console.log(e.target.id, e.intersectionRect.top)
-				let activeLi = catalogBody.querySelector('.active')
-				if (activeLi) activeLi.classList.remove('active')
+				console.log(e.target.id, e.intersectionRect.top);
+				let activeLi = catalogBody.querySelector('.active');
+				if (activeLi) activeLi.classList.remove('active');
 				document.querySelector('a[data-target=' + e.target.id + ']').classList.add('active')
 			}
-		})
+		});
 
 		headerList.forEach(item => {
 			io.observe(item)
-		})
+		});
 
 		let asideIo = new IntersectionObserver(e => {
 			if (e[0].isIntersecting) {
@@ -119,8 +119,25 @@ let method = {
 			} else {
 				$('.article-catalog')[0].classList.add('static')
 			}
-		}, [1])
+		}, [1]);
 		asideIo.observe($('.banner')[0])
+
+		$('#pc-show').addEventListener('click', e => {
+			e.stopPropagation();
+			e.preventDefault();
+			let index = e.target.dataset.index;
+			if (index) {
+				if (e.target.classList.contains('active')) {
+					return;
+				}
+				// Array.from($('.nav-item')).forEach(item => {
+				// 	console.log(item)
+				// 	item.firstElementChild.classList.remove('active');
+				// });
+				// e.target.classList.add('active');
+				location.href = `./index.html?type=${indexMap[index]}`
+			}
+		}, false);
 	}
 }
 // 初始化页面
