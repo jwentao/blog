@@ -23,6 +23,7 @@ router.get('/get_article_list', (request, response, next) => {
 	// 分页数据，默认每页10个，从0开始
 	let num = parseInt(request.query.num) ? parseInt(request.query.num) : 10;
 	let idx = parseInt(request.query.idx) ? parseInt(request.query.idx) * num : 0;
+	let sort = request.query.sort || -1;
 	let conditions = {};
 	if (request.query.type === '1' || request.query.type === '2') {
 		conditions.type = request.query.type;
@@ -34,7 +35,8 @@ router.get('/get_article_list', (request, response, next) => {
 	};
 	let option = {
 		limit: num,
-	  skip: idx
+	  skip: idx,
+		sort: {'last_time': sort}
 	};
 	mongo.find('article_info', conditions, fields, option, function (err, res) {
 		if (err) {
