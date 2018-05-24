@@ -1,6 +1,6 @@
 import './css/detail.scss';
 import './css/error.scss';
-import {$, generateMainHtml, ajax, markdown2html, generateErrorHtml, importSvg} from './js/util';
+import {$, generateMainHtml, ajax, markdown2html, generateErrorHtml, importSvg, bindSearch} from './js/util';
 let indexMap = ['default', 'all', 'origin', 'reprint'];
 let method = {
 	/**
@@ -86,6 +86,8 @@ let method = {
 		}
 	},
 	bindEvent (headerList) {
+		bindSearch();
+		// 右侧导航
 		let catalogBody = $('#catalog-body');
 		catalogBody.addEventListener('click', e => {
 			e.preventDefault();
@@ -112,7 +114,7 @@ let method = {
 		headerList.forEach(item => {
 			io.observe(item)
 		});
-
+		// 目录保持出现在视图中
 		let asideIo = new IntersectionObserver(e => {
 			if (e[0].isIntersecting) {
 				$('.article-catalog')[0].classList.remove('static')

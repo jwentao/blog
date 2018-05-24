@@ -39,7 +39,7 @@ function bindEvent() {
 			location.href = `./detail.html?id=${id}`;
 		}
 	}, false);
-
+	// 点击搜索btn
 	$('#search-btn').addEventListener('click', e => {
 		let input = $('#search-input');
 		history.replaceState({}, input.value, './search.html?title=' + input.value);
@@ -48,7 +48,14 @@ function bindEvent() {
 		$('#entry-list').innerHTML = '';
 		searchByTitle();
 	}, false);
-
+	// 回车触发click
+	$('#search-input').addEventListener('keydown', e => {
+		if (e.keyCode !== 13) {
+			console.log(e.keyCode);
+			return;
+		}
+		$('#search-btn').click();
+	}, false);
 	$('#pc-show').addEventListener('click', e => {
 		e.stopPropagation();
 		e.preventDefault();

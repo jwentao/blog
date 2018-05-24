@@ -1,6 +1,6 @@
 import './css/index.scss'
 // import 'babel-polyfill'
-import { $, ajax, generateMainHtml, generateEntryList, getQueryValue } from './js/util';
+import { $, ajax, generateMainHtml, generateEntryList, getQueryValue, bindSearch } from './js/util';
 let indexMap = ['default', 'all', 'origin', 'reprint'];
 let global = {
 	idx: 0,
@@ -61,11 +61,20 @@ function bindEvent() {
 			location.href = `./index.html?type=${indexMap[index]}`
 		}
 	}, false);
-	$('#search-btn').addEventListener('click', e => {
-		let input = $('#search-input').value;
-		console.log(input)
-		location.href = './search.html?title=' + input;
-	}, false);
+	// $('#search-btn').addEventListener('click', e => {
+	// 	let input = $('#search-input').value;
+	// 	console.log(input)
+	// 	location.href = './search.html?title=' + input;
+	// }, false);
+	//
+	// $('#search-input').addEventListener('keydown', e => {
+	// 	if (e.keyCode !== 13) {
+	// 		console.log(e.keyCode);
+	// 		return;
+	// 	}
+	// 	$('#search-btn').click();
+	// }, false);
+	bindSearch();
 
 	$('.phone-show-menu')[0].addEventListener('click', e => {
 		console.log(e)
@@ -75,7 +84,7 @@ function bindEvent() {
 }
 
 
-
+// 获取文章列表
 async function getArticleList (type) {
 	let options = {
 		idx: global.idx,

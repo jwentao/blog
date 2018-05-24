@@ -39,10 +39,10 @@ export let generateMainHtml = options => {
                     </ul>
                 </li>
                 <li class="search-bar">
-                    <form action="" role="search" class="search-form">
-                        <input type="text" placeholder="搜索" class="search-input" id="search-input">
+                    <div action="javascript: return false" role="search" class="search-form">
+                        <input type="search" placeholder="搜索" class="search-input" id="search-input">
                         <span class="iconfont icon-sousuo" id="search-btn"></span>
-                    </form>
+                    </div>
                 </li>
                 <li class="user-bar">
                     <span class="iconfont icon-yonghu"></span>
@@ -86,7 +86,24 @@ export let generateMainHtml = options => {
 	main += `</div>`;
 	return head + main
 };
+// 绑定搜索事件
+export let bindSearch = () => {
+	$('#search-btn').addEventListener('click', e => {
+		let input = $('#search-input').value;
+		console.log(input)
+		location.href = './search.html?title=' + input;
+	}, false);
 
+	$('#search-input').addEventListener('keydown', e => {
+		if (e.keyCode !== 13) {
+			console.log(e.keyCode);
+			return;
+		}
+		$('#search-btn').click();
+	}, false);
+}
+
+// 生成文章列表
 export let generateEntryList = data => {
 	let html = ``
 	for (let i in data.data) {
