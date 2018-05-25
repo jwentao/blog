@@ -56,6 +56,7 @@ function bindEvent() {
 		}
 		$('#search-btn').click();
 	}, false);
+	// 宽度过小时的下拉框
 	$('#pc-show').addEventListener('click', e => {
 		e.stopPropagation();
 		e.preventDefault();
