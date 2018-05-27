@@ -54,11 +54,6 @@ function bindEvent() {
             if (e.target.classList.contains('active')) {
                 return;
             }
-            // Array.from($('.nav-item')).forEach(item => {
-            // 	console.log(item)
-            // 	item.firstElementChild.classList.remove('active');
-            // });
-            // e.target.classList.add('active');
             location.href = `./index.html?type=${indexMap[index]}`
         }
     }, false);

@@ -1,7 +1,7 @@
 import './css/edit.scss'
 import {$, ajax, getQueryValue} from './js/util'
 // 引入showdown 和 showdown高亮
-let showdown = require('showdown')
+let showdown = require('showdown');
 let showdownhighlight = require('showdown-highlight');
 // 创建shoudown对象
 let converter = new showdown.Converter({
@@ -17,11 +17,11 @@ let postInfo = {
 	origin_article: '' // 原文(markdowm语法)
 };
 let tagList;
-let inputText = $('#text-input')
-let contentText = $('#content')
+let inputText = $('#text-input');
+let contentText = $('#content');
 let text = '';
 let id = getQueryValue('id');
-init()
+init();
 
 
 inputText.addEventListener('keyup', e => {
@@ -68,7 +68,7 @@ function extendTextArea() {
 		this.focus();
 	};
 }
-
+// 绑定事件
 function bindEvent() {
 	inputText.addEventListener('keydown', e => {
 		if (event.key !== 'Tab') return
@@ -140,6 +140,7 @@ async function postArticle(postInfo) {
 	console.log(data)
 	return data;
 }
+// 更新文章
 async function updateArticle(postInfo) {
     let data = await ajax({
         url: '/article/update_article', type: 'POST', data: postInfo
