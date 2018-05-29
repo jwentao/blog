@@ -31,7 +31,7 @@ function init() {
 function bindEvent() {
 	$('#entry-list').addEventListener('click', e => {
 		e.stopPropagation();
-		console.log('click')
+		console.log('click');
 		let node = findParentDataSet(e.target, 'id');
 		let id;
 		if (node) {

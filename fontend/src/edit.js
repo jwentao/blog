@@ -152,8 +152,8 @@ async function updateArticle(postInfo) {
 // 获取文章内容(修改文章时)
 async function getArticleInfo(id) {
 	let data = await ajax({url: '/article/get_article_detail', method: 'get', data: {id: id}});
-	console.log(data)
-	console.log(data.data.title)
+	console.log(data);
+	console.log(data.data.title);
 	inputText.value = data.data.origin_article;
 	onTextChange();
 	$('#title-value').value = data.data.title;
@@ -164,9 +164,9 @@ async function getArticleInfo(id) {
 }
 // 文本框内容变化触发
 function onTextChange() {
-	text = converter.makeHtml(inputText.value)
+	text = converter.makeHtml(inputText.value);
 	// showdown解析四个空格开头的代码块，会出现hljs字符，这里先暴力替换掉
-	text = text.replace(/>hljs/g, '>')
+	text = text.replace(/>hljs/g, '>');
 	// 序列化h1的id
 	let idx = 0
 	text = text.replace(/(<h[1-6][\S|\s]+?id=["|'])([\w|\-]*)(['|"])/g, function (a, b, c, d) {
