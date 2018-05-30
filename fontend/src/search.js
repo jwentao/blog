@@ -97,7 +97,7 @@ async function searchByTitle () {
 		$('.no-result')[0].style.display = 'block';
 	}
 }
-
+// 找到包含某自定义data的node
 function findParentDataSet(node, dataSet) {
 	if(node.dataset[dataSet]) {
 		return node
