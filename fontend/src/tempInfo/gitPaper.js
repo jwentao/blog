@@ -1,5 +1,5 @@
 // 模拟数据用
-
+// 生产环境中不需要使用
 export let gitPaper = `
 <h1 id="idx-0">1. git简介</h1>
 <p>在实际开发中，会使用git作为版本控制工具来完成团队协作。因此，对基本的git操作指令进行总结是十分有必要的，本文对一些术语或者理论基础，不重新码字，可以<a href="https://link.juejin.im?target=https%3A%2F%2Fwww.liaoxuefeng.com%2Fwiki%2F0013739516305929606dd18361248578c67b8067c8c017b000">参考廖雪峰老师的博文</a>，本文只对命令做归纳总结。</p>

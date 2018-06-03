@@ -1,3 +1,5 @@
+// ajax方法集成在util.js中了
+
 function status() {
 	if (response.status >= 200 && response.status < 300) {
 		return response
